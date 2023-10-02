@@ -22,6 +22,7 @@ asqlog.setLevel("ERROR")
 def photon_energy(wavelength):
     return ((h * c) / wavelength) * 1 / u.photon
 
+
 def get_jitter(
     rowstd: float = 1,
     colstd: float = 0.3,
@@ -78,6 +79,7 @@ def get_jitter(
         jitter.append(jitter_func(std) * unit)
 
     return time, *jitter
+
 
 def get_flatfield(stddev=0.005, seed=777):
     np.random.seed(seed)
