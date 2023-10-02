@@ -1,10 +1,9 @@
 # Third-party
 import astropy.units as u
 import numpy as np
-import pytest
 
 # First-party/Local
-from pandorasat import PACKAGEDIR, PandoraSat, __version__
+from pandorasat import PandoraSat, __version__
 
 
 def test_version():
