@@ -13,5 +13,12 @@ class Orbit:
 
     period: float = 90 * u.minute
 
+#   orbital velocity vector
+#   altitude
+#   RA/Dec (position and pointing)
+
+#   equation of ellipse to interpolate?
+#   query to JPL Horizons upon launch
+
     def __repr__(self):
         return "Pandora Orbit"
