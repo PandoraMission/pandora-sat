@@ -30,11 +30,7 @@ class NIRDetector:
     pixel_size: float
         The pixel size in microns/mm
     """
-    name: str
-    pixel_scale: float
-    pixel_size: float
-
-    def _setup(self):
+    def __post_init__(self):
         self.shape = (2048, 512)
         """Some detector specific functions to run on initialization"""
         self.flat = fits.open(
@@ -43,25 +39,15 @@ class NIRDetector:
             )[-1]
         )[1].data
 
-        # ROW COLUMN JUST LIKE PYTHON
-        self.subarray_size = (400, 80)
-        self.subarray_center = (self.wcs.wcs.crpix[1], self.wcs.wcs.crpix[0])
-        crpix = self.wcs.wcs.crpix
-        self.subarray_corner = (
-            crpix[1] - self.subarray_size[0] / 2,
-            crpix[0] - self.subarray_size[1] / 2,
-        )
-        # COLUMN, ROW
-        self.subarray_row, self.subarray_column = np.meshgrid(
-            crpix[1]
-            + np.arange(self.subarray_size[0])
-            - self.subarray_size[0] / 2,
-            crpix[0]
-            + np.arange(self.subarray_size[1])
-            - self.subarray_size[1] / 2,
-            indexing="ij",
-        )
-        self.trace_range = [-200, 100]
+    @property
+    def pixel_scale(self):
+        """Pixel scale of the detector"""
+        return 1.19 * u.arcsec / u.pixel
+
+    @property
+    def pixel_size(self):
+        """Size of a pixel"""
+        return 18.0 * u.um / u.pixel
 
     @property
     def naxis1(self):
@@ -118,7 +104,7 @@ class NIRDetector:
         Returns:
             qe (npt.NDArray): Array of the quantum efficiency of the detector
         """
-        pass
+        raise NotImplementedError
 
     def sensitivity(self, wavelength):
         sed = 1 * u.erg / u.s / u.cm**2 / u.angstrom
@@ -136,7 +122,7 @@ class NIRDetector:
         w = np.arange(0.1, 3, 0.005) * u.micron
         return np.average(w, weights=self.sensitivity(w))
 
-    def _estimate_zeropoint(self):
+    def estimate_zeropoint(self):
         """Use Vega SED to estimate the zeropoint of the detector"""
         wavelength, spectrum = load_vega()
         sens = self.sensitivity(wavelength)
