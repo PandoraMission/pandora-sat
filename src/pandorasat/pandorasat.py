@@ -4,9 +4,7 @@
 import astropy.units as u
 import numpy as np
 import pandas as pd
-from astropy.time import Time
 
-from . import PANDORASTYLE
 from .irdetector import NIRDetector
 from .optics import Optics
 from .orbit import Orbit
@@ -27,39 +25,20 @@ class PandoraSat(object):
 
     def __init__(
         self,
-        ra: u.Quantity,
-        dec: u.Quantity,
-        theta: u.Quantity,
-        obstime: Time = Time.now(),
-        duration: u.Quantity = 60 * u.minute,
         rowjitter_1sigma: u.Quantity = 0.2 * u.pixel,
         coljitter_1sigma: u.Quantity = 0.2 * u.pixel,
         thetajitter_1sigma: u.Quantity = 0.0005 * u.deg,
         jitter_timescale: u.Quantity = 60 * u.second,
     ):
-        self.ra, self.dec, self.theta, self.obstime, self.duration = (
-            ra,
-            dec,
-            theta,
-            obstime,
-            duration,
-        )
         self.Orbit = Orbit()
         self.Optics = Optics()
         self.NIRDA = NIRDetector(
             "NIR",
-            ra,
-            dec,
-            theta,
             1.19 * u.arcsec / u.pixel,
             18.0 * u.um / u.pixel,
-            False,
         )
         self.VISDA = VisibleDetector(
             "Visible",
-            ra,
-            dec,
-            theta,
             0.78 * u.arcsec / u.pixel,
             6.5 * u.um / u.pixel,
         )
