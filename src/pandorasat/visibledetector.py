@@ -1,6 +1,7 @@
 """Holds metadata and methods on Pandora VISDA"""
 # Standard library
 from glob import glob
+from dataclasses import dataclass
 
 # Third-party
 import astropy.units as u
@@ -10,11 +11,28 @@ from astropy.io import fits
 from tqdm import tqdm
 
 from . import PACKAGEDIR
-from .detector import Detector
+from .optics import Optics
+from .utils import photon_energy, load_vega
 
 
-class VisibleDetector(Detector):
-    """Pandora Visible Detector"""
+@dataclass
+class VisibleDetector:
+    """Holds information on the Pandora Visible Detector
+
+    Attributes
+    ----------
+
+    name: str
+        Name of the detector. This will determine which files are loaded. This
+        will be `"visda"` for this detector
+    pixel_scale: float
+        The pixel scale of the detector in arcseconds/pixel
+    pixel_size: float
+        The pixel size in microns/mm
+    """
+    name: str
+    pixel_scale: float
+    pixel_size: float
 
     def _setup(self):
         """Some detector specific functions to run on initialization"""
@@ -50,6 +68,16 @@ class VisibleDetector(Detector):
             +np.arange(self.subarray_size[1]),
             indexing="ij",
         )
+
+    @property
+    def naxis1(self):
+        """WCS's are COLUMN major, so naxis1 is the number of columns"""
+        return self.shape[1] * u.pixel
+
+    @property
+    def naxis2(self):
+        """WCS's are COLUMN major, so naxis2 is the number of rows"""
+        return self.shape[0] * u.pixel
 
     @property
     def _dispersion_df(self):
@@ -182,3 +210,46 @@ class VisibleDetector(Detector):
                 )
         aper /= 100
         return aper > 0.005
+
+    def qe(self, wavelength):
+        """
+        Calculate the quantum efficiency of the detector.
+
+        Parameters:
+            wavelength (npt.NDArray): Wavelength in microns as `astropy.unit`
+
+        Returns:
+            qe (npt.NDArray): Array of the quantum efficiency of the detector
+        """
+        pass
+
+    def sensitivity(self, wavelength):
+        sed = 1 * u.erg / u.s / u.cm**2 / u.angstrom
+        E = photon_energy(wavelength)
+        telescope_area = np.pi * (Optics.mirror_diameter / 2) ** 2
+        photon_flux_density = (
+            telescope_area * sed * self.throughput(wavelength) / E
+        ).to(u.photon / u.second / u.angstrom) * self.qe(wavelength)
+        sensitivity = photon_flux_density / sed
+        return sensitivity
+
+    @property
+    def midpoint(self):
+        """Mid point of the sensitivity function"""
+        w = np.arange(0.1, 3, 0.005) * u.micron
+        return np.average(w, weights=self.sensitivity(w))
+
+    def _estimate_zeropoint(self):
+        """Use Vega SED to estimate the zeropoint of the detector"""
+        wavelength, spectrum = load_vega()
+        sens = self.sensitivity(wavelength)
+        zeropoint = np.trapz(spectrum * sens, wavelength) / np.trapz(
+            sens, wavelength
+        )
+        return zeropoint
+
+    def mag_from_flux(self, flux):
+        return -2.5 * np.log10(flux / self.zeropoint)
+
+    def flux_from_mag(self, mag):
+        return self.zeropoint * 10 ** (-mag / 2.5)
