@@ -30,8 +30,6 @@ class VisibleDetector:
     pixel_size: float
         The pixel size in microns/mm
     """
-    pixel_scale: float
-    pixel_size: float
 
     def __post_init__(self):
         """Some detector specific functions to run on initialization"""
