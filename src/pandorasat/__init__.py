@@ -3,13 +3,25 @@ __version__ = "0.4.1"
 import os  # noqa
 
 PACKAGEDIR = os.path.abspath(os.path.dirname(__file__))
-PANDORASTYLE = "{}/data/pandora.mplstyle".format(PACKAGEDIR)
 
 # Standard library
 import logging  # noqa: E402
+from glob import glob  # noqa: E402
+
+# Third-party
+from .utils import get_flatfield  # noqa: E402
 
 
 logging.basicConfig()
 logger = logging.getLogger("pandorasat")
 
 from .pandorasat import PandoraSat  # noqa
+
+flatnames = glob(f"{PACKAGEDIR}/data/flatfield_*.fits")
+if len(flatnames) is None:
+    # Make a bogus flatfield
+    logger.warning("No flatfield file found. Generating a random one for you.")
+    get_flatfield()
+    logger.warning(
+        f"Generated flatfield in {PACKAGEDIR}/data/pandora_nir_20220506.fits."
+    )
