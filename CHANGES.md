@@ -1,3 +1,8 @@
+# 0.4.1
+- Separated all simulation tools into a separate package, pandora-sim
+- Renamed optics.py to hardware.py to make its contents more general
+- Wrote new tests to reflect the new intent of the package as a container for information
+
 # 0.3
 - Changed API to enforce row-major indexing everywhere
 - Added `conventions.ipynb` documentation to state conventions
