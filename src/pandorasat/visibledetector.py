@@ -11,7 +11,7 @@ from astropy.io import fits
 from tqdm import tqdm
 
 from . import PACKAGEDIR
-from .optics import Optics
+from .hardware import Optics
 from .utils import photon_energy, load_vega
 
 

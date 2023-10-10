@@ -11,7 +11,7 @@ import pandas as pd
 from astropy.io import fits
 
 from . import PACKAGEDIR
-from .optics import Optics
+from .hardware import Optics
 from .utils import photon_energy, load_vega
 
 
