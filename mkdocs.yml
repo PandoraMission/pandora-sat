@@ -3,12 +3,10 @@ nav:
     - Home: README.md
     - PandoraSat Conventions: conventions.ipynb
     - API:
-      - Target: target.md
       - PandoraSat: pandorasat.md
       - NIRDA: irdetector.md
       - VISDA: visibledetector.md
-      - PSF: psf.md
-      - Optics: optics.md
+      - Hardware: hardware.md
       - Orbit: orbit.md
     - Notebooks:
       - WASP-69b Demo: WASP-69.ipynb
