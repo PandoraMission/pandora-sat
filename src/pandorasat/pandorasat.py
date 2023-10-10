@@ -20,9 +20,7 @@ class PandoraSat(object):
         Orbit (IRDetector): Class of the Orbit properties
     """
 
-    def __init__(
-        self,
-    ):
+    def __init__(self):
         self.Orbit = Orbit()
         self.Optics = Optics()
         self.NIRDA = NIRDetector()
