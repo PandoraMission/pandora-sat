@@ -4,7 +4,7 @@
 import numpy as np
 
 from .irdetector import NIRDetector
-from .optics import Optics
+from .hardware import Optics
 from .orbit import Orbit
 from .visibledetector import VisibleDetector
 
