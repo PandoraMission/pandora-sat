@@ -11,7 +11,7 @@ def test_version():
 
 
 def test_pandorasat():
-    p = PandoraSat(ra=180 * u.deg, dec=0 * u.deg, theta=10 * u.deg)
+    p = PandoraSat()
     nirda = p.NIRDA
     visda = p.VISDA
     wavelength = np.linspace(0.1, 2, 1000) * u.micron
