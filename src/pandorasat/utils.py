@@ -18,6 +18,7 @@ asqlog.setLevel("ERROR")
 
 
 def photon_energy(wavelength):
+    """ Converts photon wavelength to energy. """
     return ((h * c) / wavelength) * 1 / u.photon
 
 
@@ -45,3 +46,10 @@ def get_flatfield(stddev=0.005, seed=777):
             checksum=True,
         )
     return
+
+
+def load_vega():
+    wavelength, spectrum = np.loadtxt(f"{PACKAGEDIR}/data/vega.dat").T
+    wavelength *= u.angstrom
+    spectrum *= u.erg / u.cm**2 / u.s / u.angstrom
+    return wavelength, spectrum
