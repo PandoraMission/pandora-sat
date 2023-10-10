@@ -21,7 +21,6 @@ class NIRDetector:
 
     Attributes
     ----------
-
     name: str
         Name of the detector. This will determine which files are loaded. This
         will be `"nirda"` for this detector
@@ -88,6 +87,7 @@ class NIRDetector:
         raise ValueError("Not Set")
 
     def throughput(self, wavelength):
+        """Throughput at the specified wavelength(s)"""
         return wavelength.value**0 * 0.61
 
     def apply_gain(self, values: u.Quantity):
@@ -98,15 +98,32 @@ class NIRDetector:
         """
         Calculate the quantum efficiency of the detector.
 
-        Parameters:
-            wavelength (npt.NDArray): Wavelength in microns as `astropy.unit`
+        Parameters
+        ----------
+        wavelength : npt.NDArray
+            Wavelength in microns as `astropy.unit`
 
-        Returns:
-            qe (npt.NDArray): Array of the quantum efficiency of the detector
+        Returns
+        -------
+        qe : npt.NDArray
+            Array of the quantum efficiency of the detector
         """
         raise NotImplementedError
 
     def sensitivity(self, wavelength):
+        """
+        Calulate the sensitivity of the detector.
+
+        Parameters
+        ----------
+        wavelength : npt.NDArray
+            Wavelength in microns as `astropy.unit`
+
+        Returns
+        -------
+        sensitivity : npt.NDArray
+            Array of the sensitivity of the detector
+        """
         sed = 1 * u.erg / u.s / u.cm**2 / u.angstrom
         E = photon_energy(wavelength)
         telescope_area = np.pi * (Optics.mirror_diameter / 2) ** 2
@@ -132,7 +149,9 @@ class NIRDetector:
         return zeropoint
 
     def mag_from_flux(self, flux):
+        """Convert flux to magnitude based on the zeropoint of the detector"""
         return -2.5 * np.log10(flux / self.zeropoint)
 
     def flux_from_mag(self, mag):
+        """Convert magnitude to flux based on the zeropoint of the detector"""
         return self.zeropoint * 10 ** (-mag / 2.5)

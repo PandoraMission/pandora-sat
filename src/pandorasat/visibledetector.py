@@ -8,7 +8,6 @@ import astropy.units as u
 import numpy as np
 import pandas as pd
 from astropy.io import fits
-from tqdm import tqdm
 
 from . import PACKAGEDIR
 from .hardware import Optics
@@ -21,7 +20,6 @@ class VisibleDetector:
 
     Attributes
     ----------
-
     name: str
         Name of the detector. This will determine which files are loaded. This
         will be `"visda"` for this detector
@@ -104,124 +102,36 @@ class VisibleDetector:
     def throughput(self, wavelength):
         return wavelength.value**0 * 0.714
 
-    def get_subarray(
-        self,
-        cat,
-        corner,
-        nreads=50,
-        nframes=10,
-        #        freeze_dimensions=[2, 3],
-        quiet=False,
-        time_series_generators=None,
-        include_noise=True,
-    ):
-        f = np.zeros((nframes, *self.subarray_size), dtype=int)
-        time = self.time[: nreads * nframes]
-        time = np.asarray([time[idx::nreads] for idx in range(nreads)]).mean(
-            axis=0
-        )
-        for idx, m in cat.iterrows():
-            if time_series_generators is None:
-                tsgenerator = lambda x: 1  # noqa
-            else:
-                tsgenerator = time_series_generators[idx]
-            if tsgenerator is None:
-                tsgenerator = lambda x: 1  # noqa
-
-            prf = self.prf(
-                row=m.vis_row,
-                col=m.vis_column,
-                corner=corner,
-                #                freeze_dimensions=freeze_dimensions,
-            )
-            for tdx in tqdm(
-                range(nframes),
-                desc="Times",
-                position=0,
-                leave=True,
-                disable=quiet,
-            ):
-                f[tdx] += self.apply_gain(
-                    u.Quantity(
-                        np.random.poisson(
-                            prf
-                            * tsgenerator(time[tdx])
-                            * m.vis_counts
-                            * nreads
-                            * self.integration_time.to(u.second).value
-                        ),
-                        dtype=int,
-                        unit=u.DN,
-                    )
-                ).value
-        if include_noise:
-            for tdx in range(nframes):
-                f[tdx] += (
-                    self.get_background_light_estimate(
-                        cat.loc[0, "ra"],
-                        cat.loc[0, "dec"],
-                        nreads * self.integration_time,
-                        self.subarray_size,
-                    )
-                ).value.astype(int)
-                f[tdx] += np.random.normal(
-                    loc=self.bias.value,
-                    scale=self.read_noise.value,
-                    size=self.subarray_size,
-                ).astype(int)
-                f[tdx] += np.random.poisson(
-                    lam=(self.dark * self.integration_time * nreads).value,
-                    size=self.subarray_size,
-                ).astype(int)
-
-        apers = np.asarray(
-            [
-                self.get_aper(
-                    row=m.vis_row,
-                    col=m.vis_column,
-                    corner=corner,
-                    # freeze_dimensions=freeze_dimensions,
-                )
-                for idx, m in cat.iterrows()
-            ]
-        )
-        return time, f, apers
-
-    def get_aper(
-        self,
-        row=0,
-        col=0,
-        corner=(0, 0),
-        shape=None,  # , freeze_dimensions=[2, 3]
-    ):
-        if shape is None:
-            shape = self.subarray_size
-        aper = np.zeros(shape)
-        for idx in np.arange(0, 1, 0.1):
-            for jdx in np.arange(0, 1, 0.1):
-                aper += self.prf(
-                    row=row + idx,
-                    col=col + jdx,
-                    corner=corner,
-                    shape=shape,
-                    #                    freeze_dimensions=freeze_dimensions,
-                )
-        aper /= 100
-        return aper > 0.005
-
     def qe(self, wavelength):
         """
         Calculate the quantum efficiency of the detector.
 
-        Parameters:
-            wavelength (npt.NDArray): Wavelength in microns as `astropy.unit`
+        Parameters
+        ----------
+        wavelength : npt.NDArray
+            Wavelength in microns as `astropy.unit`
 
-        Returns:
-            qe (npt.NDArray): Array of the quantum efficiency of the detector
+        Returns
+        -------
+        qe : npt.NDArray
+            Array of the quantum efficiency of the detector
         """
         raise NotImplementedError
 
     def sensitivity(self, wavelength):
+        """
+        Calulate the sensitivity of the detector.
+
+        Parameters
+        ----------
+        wavelength : npt.NDArray
+            Wavelength in microns as `astropy.unit`
+
+        Returns
+        -------
+        sensitivity : npt.NDArray
+            Array of the sensitivity of the detector
+        """
         sed = 1 * u.erg / u.s / u.cm**2 / u.angstrom
         E = photon_energy(wavelength)
         telescope_area = np.pi * (Optics.mirror_diameter / 2) ** 2
@@ -247,7 +157,9 @@ class VisibleDetector:
         return zeropoint
 
     def mag_from_flux(self, flux):
+        """Convert flux to magnitude based on the zeropoint of the detector"""
         return -2.5 * np.log10(flux / self.zeropoint)
 
     def flux_from_mag(self, mag):
+        """Convert magnitude to flux based on the zeropoint of the detector"""
         return self.zeropoint * 10 ** (-mag / 2.5)
