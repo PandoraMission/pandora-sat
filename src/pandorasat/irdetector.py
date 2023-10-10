@@ -108,7 +108,42 @@ class NIRDetector:
         qe : npt.NDArray
             Array of the quantum efficiency of the detector
         """
-        raise NotImplementedError
+        if not hasattr(wavelength, "unit"):
+            raise ValueError("Pass a wavelength with units")
+        wavelength = np.atleast_1d(wavelength)
+        sw_coeffs = np.array([0.65830, -0.05668, 0.25580, -0.08350])
+        sw_exponential = 100.0
+        sw_wavecut_red = 1.69  # changed from 2.38 for Pandora
+        sw_wavecut_blue = 0.75  # new for Pandora
+        with np.errstate(invalid="ignore", over="ignore"):
+            sw_qe = (
+                sw_coeffs[0]
+                + sw_coeffs[1] * wavelength.to(u.micron).value
+                + sw_coeffs[2] * wavelength.to(u.micron).value ** 2
+                + sw_coeffs[3] * wavelength.to(u.micron).value ** 3
+            )
+
+            sw_qe = np.where(
+                wavelength.to(u.micron).value > sw_wavecut_red,
+                sw_qe
+                * np.exp(
+                    (sw_wavecut_red - wavelength.to(u.micron).value)
+                    * sw_exponential
+                ),
+                sw_qe,
+            )
+
+            sw_qe = np.where(
+                wavelength.to(u.micron).value < sw_wavecut_blue,
+                sw_qe
+                * np.exp(
+                    -(sw_wavecut_blue - wavelength.to(u.micron).value)
+                    * (sw_exponential / 1.5)
+                ),
+                sw_qe,
+            )
+        sw_qe[sw_qe < 1e-5] = 0
+        return sw_qe * u.DN / u.photon
 
     def sensitivity(self, wavelength):
         """

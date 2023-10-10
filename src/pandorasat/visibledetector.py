@@ -7,7 +7,7 @@ from dataclasses import dataclass
 import astropy.units as u
 import numpy as np
 import pandas as pd
-from astropy.io import fits
+from astropy.io import fits, votable
 
 from . import PACKAGEDIR
 from .hardware import Optics
@@ -116,7 +116,20 @@ class VisibleDetector:
         qe : npt.NDArray
             Array of the quantum efficiency of the detector
         """
-        raise NotImplementedError
+        df = (
+            votable.parse(f"{PACKAGEDIR}/data/Pandora.Pandora.Visible.xml")
+            .get_first_table()
+            .to_table()
+            .to_pandas()
+        )
+        wav, transmission = np.asarray(df.Wavelength) * u.angstrom, np.asarray(
+            df.Transmission
+        )
+        return (
+            np.interp(wavelength, wav, transmission, left=0, right=0)
+            * u.DN
+            / u.photon
+        )
 
     def sensitivity(self, wavelength):
         """
