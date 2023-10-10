@@ -4,7 +4,7 @@
 import numpy as np
 
 from .irdetector import NIRDetector
-from .hardware import Optics
+from .hardware import Hardware
 from .orbit import Orbit
 from .visibledetector import VisibleDetector
 
@@ -22,7 +22,7 @@ class PandoraSat(object):
 
     def __init__(self):
         self.Orbit = Orbit()
-        self.Optics = Optics()
+        self.Hardware = Hardware()
         self.NIRDA = NIRDetector()
         self.VISDA = VisibleDetector()
 

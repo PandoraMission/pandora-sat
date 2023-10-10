@@ -11,7 +11,7 @@ import pandas as pd
 from astropy.io import fits
 
 from . import PACKAGEDIR
-from .hardware import Optics
+from .hardware import Hardware
 from .utils import photon_energy, load_vega
 
 
@@ -161,7 +161,7 @@ class NIRDetector:
         """
         sed = 1 * u.erg / u.s / u.cm**2 / u.angstrom
         E = photon_energy(wavelength)
-        telescope_area = np.pi * (Optics.mirror_diameter / 2) ** 2
+        telescope_area = np.pi * (Hardware.mirror_diameter / 2) ** 2
         photon_flux_density = (
             telescope_area * sed * self.throughput(wavelength) / E
         ).to(u.photon / u.second / u.angstrom) * self.qe(wavelength)

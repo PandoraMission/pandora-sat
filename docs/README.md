@@ -22,8 +22,8 @@ Below is an example usage of some of the functionality in this package. In gener
 ```python
 from pandorasat import PandoraSat
 print(PandoraSat.NIRDA.gain)
-print(PandoraSat.Optics.PSF)
-print(PandoraSat.VisibleDetector.sensitivity(wavelength))
+print(PandoraSat.Hardware.mirror_diameter)
+print(PandoraSat.VISDA.sensitivity(wavelength))
 print(PandoraSat.Orbit.period)
 ```
 
