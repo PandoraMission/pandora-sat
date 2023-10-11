@@ -99,8 +99,11 @@ class VisibleDetector:
 #    def fieldstop_radius(self):
 #        return 0.3 * u.deg
 
-    def throughput(self, wavelength):
-        return wavelength.value**0 * 0.714
+    def throughput(self, wavelength: u.Quantity):
+        df = pd.read_csv(f"{PACKAGEDIR}/data/dichroic-nir-transmission.csv")
+        throughput = (100 - np.interp(wavelength.to(u.nm).value, *np.asarray(df).T)) / 100
+        throughput[wavelength.to(u.nm).value < 380] *= 0
+        return throughput * 0.752
 
     def qe(self, wavelength):
         """
@@ -147,7 +150,7 @@ class VisibleDetector:
         """
         sed = 1 * u.erg / u.s / u.cm**2 / u.angstrom
         E = photon_energy(wavelength)
-        telescope_area = np.pi * (Hardware.mirror_diameter / 2) ** 2
+        telescope_area = np.pi * (Hardware().mirror_diameter / 2) ** 2
         photon_flux_density = (
             telescope_area * sed * self.throughput(wavelength) / E
         ).to(u.photon / u.second / u.angstrom) * self.qe(wavelength)

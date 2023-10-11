@@ -86,9 +86,11 @@ class NIRDetector:
     def non_linearity(self):
         raise ValueError("Not Set")
 
-    def throughput(self, wavelength):
+    def throughput(self, wavelength: u.Quantity):
         """Throughput at the specified wavelength(s)"""
-        return wavelength.value**0 * 0.61
+        df = pd.read_csv(f"{PACKAGEDIR}/data/dichroic-nir-transmission.csv")
+        throughput = np.interp(wavelength.to(u.nm).value, *np.asarray(df).T) / 100
+        return throughput ** 2 * 0.71
 
     def apply_gain(self, values: u.Quantity):
         """Applies a single gain value"""
@@ -161,7 +163,7 @@ class NIRDetector:
         """
         sed = 1 * u.erg / u.s / u.cm**2 / u.angstrom
         E = photon_energy(wavelength)
-        telescope_area = np.pi * (Hardware.mirror_diameter / 2) ** 2
+        telescope_area = np.pi * (Hardware().mirror_diameter / 2) ** 2
         photon_flux_density = (
             telescope_area * sed * self.throughput(wavelength) / E
         ).to(u.photon / u.second / u.angstrom) * self.qe(wavelength)
