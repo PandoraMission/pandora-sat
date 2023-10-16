@@ -187,8 +187,8 @@ class NIRDetector:
 
     def mag_from_flux(self, flux):
         """Convert flux to magnitude based on the zeropoint of the detector"""
-        return -2.5 * np.log10(flux / self.zeropoint)
+        return -2.5 * np.log10(flux / self.estimate_zeropoint())
 
     def flux_from_mag(self, mag):
         """Convert magnitude to flux based on the zeropoint of the detector"""
-        return self.zeropoint * 10 ** (-mag / 2.5)
+        return self.estimate_zeropoint() * 10 ** (-mag / 2.5)
