@@ -2,17 +2,17 @@
 
 # PandoraSat
 
-This Python package contains metadata for Pandora, and **basic** functions to create estimates of, e.g. count rates from targets on the detectors.
+This Python package contains metadata for Pandora and **basic** functions describing things such as detector sensitivity and zeropoint estimation.
 
 ### Installation
 
-To install this package you can use
+Eventually, to install this package you will be able to use
 
 ```
 pip install pandora-sat --upgrade
 ```
 
-Make sure to upgrade regularly to get the latest estimates of the Pandora meta data.
+For now, clone this repository, enter the `pandora-sat` directory, and execute the command `poetry install` to build the package locally. Make sure to upgrade regularly to get the latest estimates of the Pandora meta data.
 
 
 ### Example Usage
@@ -21,10 +21,13 @@ Below is an example usage of some of the functionality in this package. In gener
 
 ```python
 from pandorasat import PandoraSat
-print(PandoraSat.NIRDA.gain)
-print(PandoraSat.Hardware.mirror_diameter)
-print(PandoraSat.VISDA.sensitivity(wavelength))
-print(PandoraSat.Orbit.period)
+p = PandoraSat()
+print(p.NIRDA.pixel_scale)
+print(p.Hardware.mirror_diameter)
+print(p.VISDA.sensitivity(wavelength))
+print(p.Orbit.period)
 ```
 
 See our API documentation for full details on the metadata available in this package.
+
+To update any of the values or functions contained within `pandora-sat` due to new testing, commissioning, etc., please open a pull request. Update the relevant values or functions on your branch and then the updates will be reviewed prior to being merged into the main branch of `pandora-sat`.
