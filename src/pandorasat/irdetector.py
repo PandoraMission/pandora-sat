@@ -88,7 +88,7 @@ class NIRDetector:
 
     def throughput(self, wavelength: u.Quantity):
         """Throughput at the specified wavelength(s)"""
-        df = pd.read_csv(f"{PACKAGEDIR}/data/dichroic-nir-transmission.csv")
+        df = pd.read_csv(f"{PACKAGEDIR}/data/dichroic-transmission.csv")
         throughput = np.interp(wavelength.to(u.nm).value, *np.asarray(df).T) / 100
         return throughput ** 2 * 0.71
 

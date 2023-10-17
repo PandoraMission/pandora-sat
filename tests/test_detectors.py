@@ -35,7 +35,7 @@ def test_detector_snr():
     # spec_res = 1.3*u.micron / 30
     # wavelength = np.arange(0.1, 3, spec_res.value)*u.micron
     wavelength = (np.loadtxt(
-        f"{PACKAGEDIR}/data/dichroic-nir-transmission.csv",
+        f"{PACKAGEDIR}/data/dichroic-transmission.csv",
         unpack=True,
         skiprows=1,
         delimiter=','

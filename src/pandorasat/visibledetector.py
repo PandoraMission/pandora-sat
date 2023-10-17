@@ -100,7 +100,7 @@ class VisibleDetector:
 #        return 0.3 * u.deg
 
     def throughput(self, wavelength: u.Quantity):
-        df = pd.read_csv(f"{PACKAGEDIR}/data/dichroic-nir-transmission.csv")
+        df = pd.read_csv(f"{PACKAGEDIR}/data/dichroic-transmission.csv")
         throughput = (100 - np.interp(wavelength.to(u.nm).value, *np.asarray(df).T)) / 100
         throughput[wavelength.to(u.nm).value < 380] *= 0
         return throughput * 0.752
