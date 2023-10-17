@@ -1,8 +1,6 @@
 """Holds metadata and methods on Pandora"""
 
 # Third-party
-import numpy as np
-
 from .irdetector import NIRDetector
 from .hardware import Hardware
 from .orbit import Orbit
@@ -27,7 +25,7 @@ class PandoraSat(object):
         self.VISDA = VisibleDetector()
 
     def __repr__(self):
-        return f"Pandora Observatory (RA: {np.round(self.ra, 3)}, Dec: {np.round(self.dec, 3)}, theta: {np.round(self.theta, 3)})"
+        return "Pandora Observatory"
 
     def _repr_html_(self):
-        return f"Pandora Observatory (RA: {self.ra._repr_latex_()},  Dec:{self.dec._repr_latex_()}, theta: {self.theta._repr_latex_()})"
+        return "Pandora Observatory"
