@@ -9,8 +9,7 @@ nav:
       - Hardware: hardware.md
       - Orbit: orbit.md
     - Notebooks:
-      - WASP-69b Demo: WASP-69.ipynb
-      - GJ 3470b Demo: GJ3470.ipynb
+      - PandoraSat Demo: intro-to-pandorasat.ipynb
 theme:
   name: "material"
   icon:

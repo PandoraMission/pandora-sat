@@ -1,6 +1,6 @@
-# Documentation for `Optics`
+# Documentation for `Hardware`
 
-::: pandorasat.optics
+::: pandorasat.hardware
     handler: python
     rendering:
       show_root_heading: false
