@@ -15,6 +15,8 @@ from .utils import get_flatfield  # noqa: E402
 logging.basicConfig()
 logger = logging.getLogger("pandorasat")
 
+from .pandorasat import PandoraSat  # noqa
+
 flatnames = glob(f"{PACKAGEDIR}/data/flatfield_*.fits")
 if len(flatnames) == 0:
     # Make a bogus flatfield
