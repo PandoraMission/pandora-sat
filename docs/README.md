@@ -24,7 +24,7 @@ from pandorasat import PandoraSat
 p = PandoraSat()
 print(p.NIRDA.pixel_scale)
 print(p.Hardware.mirror_diameter)
-print(p.VISDA.sensitivity(wavelength))
+print(p.VISDA.naxis1)
 print(p.Orbit.period)
 ```
 
