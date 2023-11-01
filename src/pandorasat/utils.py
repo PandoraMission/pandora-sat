@@ -49,7 +49,7 @@ def get_flatfield(stddev=0.005, seed=777):
 
 
 def load_vega():
-    wavelength, spectrum = np.loadtxt(f"{PACKAGEDIR}/data/vega.dat").T
+    wavelength, spectrum = np.loadtxt(f"{PACKAGEDIR}/data/vega.csv", delimiter=',').T
     wavelength *= u.angstrom
     spectrum *= u.erg / u.cm**2 / u.s / u.angstrom
     return wavelength, spectrum
