@@ -17,17 +17,8 @@ from .utils import photon_energy, load_vega
 
 @dataclass
 class NIRDetector:
-    """Holds information on the Pandora IR detector
-
-    Attributes
-    ----------
-    name: str
-        Name of the detector. This will determine which files are loaded. This
-        will be `"nirda"` for this detector
-    pixel_scale: float
-        The pixel scale of the detector in arcseconds/pixel
-    pixel_size: float
-        The pixel size in microns/mm
+    """
+    Holds information on the Pandora IR detector
     """
     def __post_init__(self):
         self.shape = (2048, 512)
