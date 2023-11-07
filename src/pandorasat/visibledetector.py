@@ -86,9 +86,9 @@ class VisibleDetector:
     def integration_time(self):
         return 0.2 * u.second
 
-#    @property
-#    def fieldstop_radius(self):
-#        return 0.3 * u.deg
+    @property
+    def fieldstop_radius(self):
+        return 0.3 * u.deg
 
     def throughput(self, wavelength: u.Quantity):
         df = pd.read_csv(f"{PACKAGEDIR}/data/dichroic-transmission.csv")
