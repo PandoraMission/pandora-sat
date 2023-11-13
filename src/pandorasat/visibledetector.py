@@ -47,6 +47,11 @@ class VisibleDetector:
             self.fieldstop = ~((np.abs(C) >= r) | (np.abs(R) >= r))
 
     @property
+    def shape(self):
+        """Shape of the detector in pixels"""
+        return (2048, 2048)
+
+    @property
     def pixel_scale(self):
         """Pixel scale of the detector"""
         return 0.78 * u.arcsec / u.pixel
@@ -153,6 +158,26 @@ class VisibleDetector:
         """Mid point of the sensitivity function"""
         w = np.arange(0.1, 3, 0.005) * u.micron
         return np.average(w, weights=self.sensitivity(w))
+
+    def apply_gain(self, values: u.Quantity):
+        """Applies a piecewise gain function"""
+        x = np.atleast_1d(values)
+        masks = np.asarray(
+            [
+                (x >= 0 * u.DN) & (x < 1e3 * u.DN),
+                (x >= 1e3 * u.DN) & (x < 5e3 * u.DN),
+                (x >= 5e3 * u.DN) & (x < 2.8e4 * u.DN),
+                (x >= 2.8e4 * u.DN),
+            ]
+        )
+        gain = np.asarray([0.52, 0.6, 0.61, 0.67]) * u.electron / u.DN
+        if values.ndim == 1:
+            gain = gain[:, None]
+        if values.ndim == 2:
+            gain = gain[:, None, None]
+        return u.Quantity(
+            (masks * x[None, :] * gain).sum(axis=0), dtype=int, unit=u.electron
+        )
 
     def estimate_zeropoint(self):
         """Use Vega SED to estimate the zeropoint of the detector"""
