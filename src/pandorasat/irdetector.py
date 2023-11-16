@@ -30,6 +30,11 @@ class NIRDetector:
         )[1].data
 
     @property
+    def shape(self):
+        """Shape of the detector in pixels"""
+        return (2048, 512)
+
+    @property
     def pixel_scale(self):
         """Pixel scale of the detector"""
         return 1.19 * u.arcsec / u.pixel
@@ -48,6 +53,11 @@ class NIRDetector:
     def naxis2(self):
         """WCS's are COLUMN major, so naxis2 is the number of rows"""
         return self.shape[0] * u.pixel
+
+    # @property
+    # def subarray_size(self):
+    #     """Size of the detector subarray in pixels"""
+    #     return (400, 80)
 
     @property
     def _dispersion_df(self):
