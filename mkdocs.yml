@@ -1,7 +1,6 @@
 site_name: PandoraSat
 nav:
     - Home: README.md
-    - PandoraSat Conventions: conventions.ipynb
     - API:
       - PandoraSat: pandorasat.md
       - NIRDA: irdetector.md

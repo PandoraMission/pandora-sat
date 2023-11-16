@@ -8,9 +8,7 @@ PACKAGEDIR = os.path.abspath(os.path.dirname(__file__))
 import logging  # noqa: E402
 from glob import glob  # noqa: E402
 
-# Third-party
 from .utils import get_flatfield  # noqa: E402
-
 
 logging.basicConfig()
 logger = logging.getLogger("pandorasat")

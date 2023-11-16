@@ -1,7 +1,7 @@
 """Holds metadata and methods on Pandora VISDA"""
 # Standard library
-from glob import glob
 from dataclasses import dataclass
+from glob import glob
 
 # Third-party
 import astropy.units as u
@@ -11,7 +11,7 @@ from astropy.io import fits, votable
 
 from . import PACKAGEDIR
 from .hardware import Hardware
-from .utils import photon_energy, load_vega
+from .utils import load_vega, photon_energy
 
 
 @dataclass
@@ -22,8 +22,6 @@ class VisibleDetector:
 
     def __post_init__(self):
         """Some detector specific functions to run on initialization"""
-        self.shape = (2048, 2048)
-
         self.flat = fits.open(
             np.sort(
                 np.atleast_1d(glob(f"{PACKAGEDIR}/data/flatfield_VISDA*.fits"))
@@ -97,7 +95,9 @@ class VisibleDetector:
 
     def throughput(self, wavelength: u.Quantity):
         df = pd.read_csv(f"{PACKAGEDIR}/data/dichroic-transmission.csv")
-        throughput = (100 - np.interp(wavelength.to(u.nm).value, *np.asarray(df).T)) / 100
+        throughput = (
+            100 - np.interp(wavelength.to(u.nm).value, *np.asarray(df).T)
+        ) / 100
         throughput[wavelength.to(u.nm).value < 380] *= 0
         return throughput * 0.752
 

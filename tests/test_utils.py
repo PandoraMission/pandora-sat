@@ -7,12 +7,14 @@ import astropy.units as u
 import numpy as np
 
 # First-party/Local
-from pandorasat import utils, PACKAGEDIR
+from pandorasat import PACKAGEDIR, utils
 
 
 # test photon_energy
 def test_photon_energy():
-    assert np.isclose(utils.photon_energy(0.21 * u.m).value, 9.41e-25, atol=1e-25)
+    assert np.isclose(
+        utils.photon_energy(0.21 * u.m).value, 9.41e-25, atol=1e-25
+    )
     return
 
 

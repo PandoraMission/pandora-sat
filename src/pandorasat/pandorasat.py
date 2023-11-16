@@ -1,8 +1,7 @@
 """Holds metadata and methods on Pandora"""
 
-# Third-party
-from .irdetector import NIRDetector
 from .hardware import Hardware
+from .irdetector import NIRDetector
 from .orbit import Orbit
 from .visibledetector import VisibleDetector
 

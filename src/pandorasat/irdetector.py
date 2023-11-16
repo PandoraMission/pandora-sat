@@ -1,8 +1,8 @@
 """Holds metadata and methods on Pandora NIRDA"""
 
 # Standard library
-from glob import glob
 from dataclasses import dataclass
+from glob import glob
 
 # Third-party
 import astropy.units as u
@@ -12,7 +12,7 @@ from astropy.io import fits
 
 from . import PACKAGEDIR
 from .hardware import Hardware
-from .utils import photon_energy, load_vega
+from .utils import load_vega, photon_energy
 
 
 @dataclass
@@ -20,8 +20,8 @@ class NIRDetector:
     """
     Holds information on the Pandora IR detector
     """
+
     def __post_init__(self):
-        self.shape = (2048, 512)
         """Some detector specific functions to run on initialization"""
         self.flat = fits.open(
             np.sort(
@@ -85,8 +85,10 @@ class NIRDetector:
     def throughput(self, wavelength: u.Quantity):
         """Throughput at the specified wavelength(s)"""
         df = pd.read_csv(f"{PACKAGEDIR}/data/dichroic-transmission.csv")
-        throughput = np.interp(wavelength.to(u.nm).value, *np.asarray(df).T) / 100
-        return throughput ** 2 * 0.71
+        throughput = (
+            np.interp(wavelength.to(u.nm).value, *np.asarray(df).T) / 100
+        )
+        return throughput**2 * 0.71
 
     def apply_gain(self, values: u.Quantity):
         """Applies a single gain value"""

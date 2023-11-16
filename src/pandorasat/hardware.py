@@ -14,6 +14,7 @@ class Hardware:
     Args:
         mirror_diameter (float): Diameter of the Pandora mirror
     """
+
     def __repr__(self):
         return "Pandora Optics"
 
