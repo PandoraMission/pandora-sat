@@ -1,3 +1,6 @@
+# 0.5.0
+- completed separation of pandora-sat from pandora-sim
+
 # 0.4.1
 - Separated all simulation tools into a separate package, pandora-sim
 - Renamed optics.py to hardware.py to make its contents more general
