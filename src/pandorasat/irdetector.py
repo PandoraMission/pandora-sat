@@ -54,11 +54,6 @@ class NIRDetector:
         """WCS's are COLUMN major, so naxis2 is the number of rows"""
         return self.shape[0] * u.pixel
 
-    # @property
-    # def subarray_size(self):
-    #     """Size of the detector subarray in pixels"""
-    #     return (400, 80)
-
     @property
     def _dispersion_df(self):
         return pd.read_csv(f"{PACKAGEDIR}/data/pixel_vs_wavelength.csv")
