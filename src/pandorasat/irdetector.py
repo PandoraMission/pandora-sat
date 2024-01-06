@@ -29,6 +29,9 @@ class NIRDetector:
             )[-1]
         )[1].data
 
+    def __repr__(self):
+        return "NIRDetector"
+
     @property
     def shape(self):
         """Shape of the detector in pixels"""

@@ -23,3 +23,6 @@ if len(flatnames) == 0:
     logger.warning(
         f"Generated flatfield in {PACKAGEDIR}/data/pandora_nir_20220506.fits."
     )
+
+from .irdetector import NIRDetector  # noqa: E402
+from .visibledetector import VisibleDetector  # noqa: E402

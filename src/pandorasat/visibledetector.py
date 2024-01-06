@@ -44,6 +44,9 @@ class VisibleDetector:
             r = (self.fieldstop_radius / self.pixel_scale).to(u.pix).value
             self.fieldstop = ~((np.abs(C) >= r) | (np.abs(R) >= r))
 
+    def __repr__(self):
+        return "VisibleDetector"
+
     @property
     def shape(self):
         """Shape of the detector in pixels"""
