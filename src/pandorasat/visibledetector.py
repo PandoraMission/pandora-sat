@@ -129,7 +129,7 @@ class VisibleDetector:
         )
         return (
             np.interp(wavelength, wav, transmission, left=0, right=0)
-            * u.DN
+            * u.electron
             / u.photon
         )
 

@@ -146,7 +146,7 @@ class NIRDetector:
                 sw_qe,
             )
         sw_qe[sw_qe < 1e-5] = 0
-        return sw_qe * u.DN / u.photon
+        return sw_qe * u.electron / u.photon
 
     def sensitivity(self, wavelength):
         """

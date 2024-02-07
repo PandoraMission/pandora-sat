@@ -8,6 +8,9 @@ PACKAGEDIR = os.path.abspath(os.path.dirname(__file__))
 import logging  # noqa: E402
 from glob import glob  # noqa: E402
 
+pandorastyle = glob(f"{PACKAGEDIR}/data/pandora.mplstyle")
+
+
 from .utils import get_flatfield  # noqa: E402
 
 logging.basicConfig()
