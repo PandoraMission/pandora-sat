@@ -6,13 +6,9 @@ import astropy.units as u
 import numpy as np
 
 # First-party/Local
-from pandorasat import PACKAGEDIR, PandoraSat, __version__
+from pandorasat import PACKAGEDIR, PandoraSat
 from pandorasat.irdetector import NIRDetector
 from pandorasat.visibledetector import VisibleDetector
-
-
-def test_version():
-    assert __version__ == "0.5.2"
 
 
 # Check NIR and Visible detectors have the correct sensitivity
