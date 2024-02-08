@@ -23,11 +23,11 @@ class NIRDetector:
 
     def __post_init__(self):
         """Some detector specific functions to run on initialization"""
-        self.flat = fits.open(
-            np.sort(
-                np.atleast_1d(glob(f"{PACKAGEDIR}/data/flatfield_NIRDA*.fits"))
-            )[-1]
-        )[1].data
+        # self.flat = fits.open(
+        #     np.sort(
+        #         np.atleast_1d(glob(f"{PACKAGEDIR}/data/flatfield_NIRDA*.fits"))
+        #     )[-1]
+        # )[1].data
 
     def __repr__(self):
         return "NIRDetector"
