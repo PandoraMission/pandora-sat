@@ -6,6 +6,7 @@ from glob import glob
 import astropy.units as u
 import numpy as np
 import pytest
+from astropy.coordinates import SkyCoord
 
 # First-party/Local
 from pandorasat import PACKAGEDIR, utils
@@ -45,6 +46,18 @@ def test_load_vega():
     assert len(wav) > 0
     assert len(spec) > 0
     return
+
+
+def test_get_skycatalog():
+    if os.getenv("GITHUB_ACTIONS") == "true":
+        pytest.skip(
+            "Skipping this test on GitHub Actions because this requires an database query."
+        )
+    cat = utils.get_sky_catalog(radius=0.05)
+    assert isinstance(cat, dict)
+    assert isinstance(cat["coords"], SkyCoord)
+    assert len(cat["coords"]) > 0
+    assert "jmag" in cat.keys()
 
 
 def test_get_phoenix():

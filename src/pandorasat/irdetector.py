@@ -2,13 +2,11 @@
 
 # Standard library
 from dataclasses import dataclass
-from glob import glob
 
 # Third-party
 import astropy.units as u
 import numpy as np
 import pandas as pd
-from astropy.io import fits
 
 from . import PACKAGEDIR
 from .hardware import Hardware
