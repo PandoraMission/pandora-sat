@@ -1,20 +1,17 @@
-# Standard library
-import os
-
 # Third-party
 import astropy.units as u
 import numpy as np
 from astropy.constants import c, h
 from astropy.io import fits
 from astropy.time import Time
-from astroquery import log as asqlog
 
 from . import PACKAGEDIR, __version__
+from .phoenix import get_phoenix_model
 
-phoenixpath = f"{PACKAGEDIR}/data/phoenix"
-os.environ["PYSYN_CDBS"] = phoenixpath
 
-asqlog.setLevel("ERROR")
+def SED(teff, logg=4.5, jmag=None, vmag=None):
+    """Gives a model SED for a given Teff, logg and magnitude."""
+    return get_phoenix_model(teff, logg=logg, jmag=jmag, vmag=vmag)
 
 
 def photon_energy(wavelength):
@@ -22,7 +19,7 @@ def photon_energy(wavelength):
     return ((h * c) / wavelength) * 1 / u.photon
 
 
-def get_flatfield(stddev=0.005, seed=777):
+def simulate_flatfield(stddev=0.005, seed=777):
     np.random.seed(seed)
     """ This generates and writes a dummy flatfield file. """
     for detector in ["VISDA", "NIRDA"]:
