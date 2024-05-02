@@ -178,7 +178,6 @@ def get_phoenix_model(teff, logg=4.5, jmag=None, vmag=None):
         )
         # Third-party
         import pysynphot
-    print(os.environ["PYSYN_CDBS"])
     logg1 = logg.value if isinstance(logg, u.Quantity) else logg
     star = pysynphot.Icat(
         "phoenix",
