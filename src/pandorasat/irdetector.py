@@ -33,7 +33,7 @@ class NIRDetector:
     @property
     def shape(self):
         """Shape of the detector in pixels"""
-        return (2048, 512)
+        return (2048, 2048)
 
     @property
     def pixel_scale(self):
@@ -64,8 +64,13 @@ class NIRDetector:
         return 1e-5 * u.second / u.pixel
 
     @property
-    def frame_time(self):
-        return np.product(self.subarray_size) * u.pixel * self.pixel_read_time
+    def subarray_size(self):
+        return (400, 80)
+
+    def frame_time(self, array_size=None):
+        if array_size is None:
+            array_size = self.subarray_size
+        return np.product(array_size) * u.pixel * self.pixel_read_time
 
     @property
     def dark(self):
