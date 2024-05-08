@@ -6,37 +6,30 @@ authors = ["Christina Hedges <christina.l.hedges@nasa.gov>"]
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.13"
-numpy = "^1.22.3"
-astropy = "^5.0.4"
-scipy = "^1.8.1"
-tqdm = "^4.64.0"
+numpy = ">=1.26.0,<2.0.0"
+astropy = ">=5.3.3,<6.0.0"
+matplotlib = ">=3.8.0,<4.0.0"
+scipy = ">=1.11.2,<2.0.0"
+tqdm = ">=4.60.1,<5.0.0"
+rich = ">=13.0.0"
 pysynphot = ">=2.0.0"
-astroquery = "^0.4.6"
-pytest-remotedata = "^0.4.0"
-setuptools = "^67.7.2"
-openpyxl = "^3.1.2"
-mkdocstrings-python = "^1.7.4"
-jupyter-contrib-nbextensions = "^0.7.0"
-pandas = {version="^2.2.0", extras = ["parquet"]}
+astroquery = ">=0.4.6"
+pandas = {version=">=2.1.1,<3.0.0", extras = ["parquet"]}
 
-[tool.poetry.dev-dependencies]
-pytest = "^5.2"
+
+[tool.poetry.group.dev.dependencies]
 ipython = "^8.6.0"
+jupyterlab = "<3.1.0"
+pytest = "^5.2"
 flake8 = "^4.0.1"
 black = "^22.12.0"
 isort = "^5.10.1"
 mkdocs = "^1.3.0"
 mkdocs-material = "^8.2.11"
-jupyterlab = "<3.1.0"
 mkdocs-jupyter = "^0.20.1"
 pytkdocs = "^0.16.1"
-matplotlib = "^3.5.2"
-lxml = "^4.8.0"
 grismconf = "^1.32"
 
-[tool.poetry.group.dev.dependencies]
-notebook = "^6.5.4"
-jupyter-contrib-nbextensions = "^0.7.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
