@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pandorasat"
-version = "0.5.8"
+version = "0.5.9"
 description = ""
 authors = ["Christina Hedges <christina.l.hedges@nasa.gov>"]
 
@@ -15,21 +15,18 @@ rich = ">=13.0.0"
 pysynphot = ">=2.0.0"
 astroquery = ">=0.4.6"
 pandas = {version=">=2.1.1,<3.0.0", extras = ["parquet"]}
+ipython = ">=8.6.0,<9.0.0"
+jupyterlab = "<3.1.0"  # This remains as it may need to avoid specific breaking changes post-3.1.0
+pytest = ">=5.2,<6.0.0"
+flake8 = ">=4.0.1,<5.0.0"
+black = ">=22.12.0,<23.0.0"
+isort = ">=5.10.1,<6.0.0"
+mkdocs = ">=1.3.0,<2.0.0"
+mkdocs-material = ">=8.2.11,<9.0.0"
+mkdocs-jupyter = ">=0.20.1,<1.0.0"
+pytkdocs = ">=0.16.1,<1.0.0"
+grismconf = ">=1.32,<2.0.0"
 
-
-
-[tool.poetry.group.dev.dependencies]
-ipython = "^8.6.0"
-jupyterlab = "<3.1.0"
-pytest = "^5.2"
-flake8 = "^4.0.1"
-black = "^22.12.0"
-isort = "^5.10.1"
-mkdocs = "^1.3.0"
-mkdocs-material = "^8.2.11"
-mkdocs-jupyter = "^0.20.1"
-pytkdocs = "^0.16.1"
-grismconf = "^1.32"
 
 
 [build-system]
