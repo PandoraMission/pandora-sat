@@ -40,7 +40,7 @@ class VisibleDetector:
                 )[:, None, None]
                 / 2
             )
-            r = (self.fieldstop_radius / self.pixel_scale).to(u.pix).value
+            r = (self.fieldstop_radius / self.pixel_size).to(u.pix).value
             self.fieldstop = ~((np.abs(C) >= r) | (np.abs(R) >= r))
 
     def __repr__(self):
@@ -93,7 +93,7 @@ class VisibleDetector:
 
     @property
     def fieldstop_radius(self):
-        return 0.3 * u.deg
+        return 6.5 * u.mm
 
     def throughput(self, wavelength: u.Quantity):
         df = pd.read_csv(f"{PACKAGEDIR}/data/dichroic-transmission.csv")

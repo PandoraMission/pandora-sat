@@ -6,7 +6,6 @@ from glob import glob
 import astropy.units as u
 import numpy as np
 import pytest
-from astropy.coordinates import SkyCoord
 
 # First-party/Local
 from pandorasat import PACKAGEDIR, utils
@@ -48,16 +47,55 @@ def test_load_vega():
     return
 
 
-def test_get_skycatalog():
-    if os.getenv("GITHUB_ACTIONS") == "true":
-        pytest.skip(
-            "Skipping this test on GitHub Actions because this requires an database query."
-        )
-    cat = utils.get_sky_catalog(radius=0.05)
+@pytest.mark.remote_data
+def test_get_sky_catalog():
+    # Works with no units
+    cat = utils.get_sky_catalog(ra=210.8023, dec=54.349, radius=0.05)
     assert isinstance(cat, dict)
-    assert isinstance(cat["coords"], SkyCoord)
-    assert len(cat["coords"]) > 0
-    assert "jmag" in cat.keys()
+    assert np.all(
+        [
+            k in cat.keys()
+            for k in [
+                "teff",
+                "logg",
+                "jmag",
+                "bmag",
+                "RUWE",
+                "ang_sep",
+                "coords",
+                "source_id",
+            ]
+        ]
+    )
+    assert len(cat["coords"]) > 1
+
+    # Works with units
+    cat = utils.get_sky_catalog(
+        ra=210.8023 * u.deg, dec=54.349 * u.deg, radius=0.05 * u.deg
+    )
+    assert isinstance(cat, dict)
+    assert np.all(
+        [
+            k in cat.keys()
+            for k in [
+                "teff",
+                "logg",
+                "jmag",
+                "bmag",
+                "RUWE",
+                "ang_sep",
+                "coords",
+                "source_id",
+            ]
+        ]
+    )
+    assert len(cat["coords"]) > 1
+
+    # Can return the top 1 hit
+    cat = utils.get_sky_catalog(
+        ra=210.8023 * u.deg, dec=54.349 * u.deg, radius=0.02 * u.deg, limit=1
+    )
+    assert len(cat["coords"]) == 1
 
 
 def test_get_phoenix():

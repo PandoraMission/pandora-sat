@@ -1,4 +1,4 @@
-__version__ = "0.5.7"
+__version__ = "0.5.11"
 # Standard library
 import os  # noqa
 from glob import glob
