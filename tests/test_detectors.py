@@ -29,6 +29,33 @@ def test_pandorasat():
     assert isinstance(wcs.sip, Sip)
 
 
+def test_gain():
+    for detector in [VisibleDetector(), NIRDetector()]:
+        r = detector.apply_gain(1e3 * u.DN)
+        assert r.ndim == 0
+        assert r.unit == u.electron
+
+        r = detector.apply_gain([1e3] * u.DN)
+        assert len(r) == 1
+        assert r.ndim == 1
+
+        r = detector.apply_gain([1e3, 1e3] * u.DN)
+        assert len(r) == 2
+        assert r.ndim == 1
+
+        r = detector.apply_gain(1e3 * u.electron)
+        assert r.ndim == 0
+        assert r.unit == u.DN
+
+        r = detector.apply_gain([1e3] * u.electron)
+        assert len(r) == 1
+        assert r.ndim == 1
+
+        r = detector.apply_gain([1e3, 1e3] * u.electron)
+        assert len(r) == 2
+        assert r.ndim == 1
+
+
 # Check that NIR and Visible detector SNR mission requirements are met
 def test_detector_snr():
     # Fetch test star spectrum to test with

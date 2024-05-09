@@ -164,23 +164,53 @@ class VisibleDetector:
 
     def apply_gain(self, values: u.Quantity):
         """Applies a piecewise gain function"""
+        if not isinstance(values, u.Quantity):
+            raise ValueError("Must pass a quantity.")
+        print(values.ndim)
         x = np.atleast_1d(values)
-        masks = np.asarray(
-            [
-                (x >= 0 * u.DN) & (x < 1e3 * u.DN),
-                (x >= 1e3 * u.DN) & (x < 5e3 * u.DN),
-                (x >= 5e3 * u.DN) & (x < 2.8e4 * u.DN),
-                (x >= 2.8e4 * u.DN),
-            ]
-        )
         gain = np.asarray([0.52, 0.6, 0.61, 0.67]) * u.electron / u.DN
-        if values.ndim == 1:
-            gain = gain[:, None]
-        if values.ndim == 2:
-            gain = gain[:, None, None]
-        return u.Quantity(
-            (masks * x[None, :] * gain).sum(axis=0), dtype=int, unit=u.electron
-        )
+
+        if values.unit == u.electron:
+            masks = np.asarray(
+                [
+                    (x >= 0 * u.electron) & (x < 520 * u.electron),
+                    (x >= 520 * u.electron) & (x < 3000 * u.electron),
+                    (x >= 3000 * u.electron) & (x < 17080 * u.electron),
+                    (x >= 17080 * u.electron),
+                ]
+            )
+            if values.ndim <= 1:
+                gain = gain[:, None]
+            if values.ndim == 2:
+                gain = gain[:, None, None]
+            result = u.Quantity(
+                (masks * x[None, :] / gain).sum(axis=0), dtype=int, unit=u.DN
+            )
+            if values.ndim == 0:
+                return result[0]
+            return result
+
+        elif values.unit == u.DN:
+            masks = np.asarray(
+                [
+                    (x >= 0 * u.DN) & (x < 1e3 * u.DN),
+                    (x >= 1e3 * u.DN) & (x < 5e3 * u.DN),
+                    (x >= 5e3 * u.DN) & (x < 2.8e4 * u.DN),
+                    (x >= 2.8e4 * u.DN),
+                ]
+            )
+            if values.ndim <= 1:
+                gain = gain[:, None]
+            if values.ndim == 2:
+                gain = gain[:, None, None]
+            result = u.Quantity(
+                (masks * x[None, :] * gain).sum(axis=0),
+                dtype=int,
+                unit=u.electron,
+            )
+            if values.ndim == 0:
+                return result[0]
+            return result
 
     def estimate_zeropoint(self):
         """Use Vega SED to estimate the zeropoint of the detector"""

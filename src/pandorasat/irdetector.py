@@ -97,9 +97,18 @@ class NIRDetector:
         )
         return throughput**2 * 0.71
 
+    @property
+    def gain(self):
+        return 0.5 * u.electron / u.DN
+
     def apply_gain(self, values: u.Quantity):
         """Applies a single gain value"""
-        return values * 0.5 * u.electron / u.DN
+        if not isinstance(values, u.Quantity):
+            raise ValueError("Must pass a quantity.")
+        if values.unit == u.electron:
+            return values / self.gain
+        if values.unit == u.DN:
+            return values * self.gain
 
     def qe(self, wavelength):
         """
