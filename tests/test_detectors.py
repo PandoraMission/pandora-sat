@@ -4,6 +4,7 @@ import pickle
 # Third-party
 import astropy.units as u
 import numpy as np
+from astropy.wcs import WCS, Sip
 
 # First-party/Local
 from pandorasat import PACKAGEDIR, PandoraSat
@@ -19,7 +20,13 @@ def test_pandorasat():
     wavelength = np.linspace(0.1, 2, 1000) * u.micron
     nirda.sensitivity(wavelength)
     visda.sensitivity(wavelength)
-    return
+
+    wcs = visda.get_wcs(150, 0)
+    assert isinstance(wcs, WCS)
+    assert isinstance(wcs.sip, Sip)
+    wcs = nirda.get_wcs(150, 0)
+    assert isinstance(wcs, WCS)
+    assert isinstance(wcs.sip, Sip)
 
 
 # Check that NIR and Visible detector SNR mission requirements are met

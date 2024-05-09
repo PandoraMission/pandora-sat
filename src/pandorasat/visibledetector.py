@@ -11,6 +11,7 @@ from astropy.io import votable
 from . import PACKAGEDIR
 from .hardware import Hardware
 from .utils import load_vega, photon_energy
+from .wcs import get_wcs
 
 
 @dataclass
@@ -197,3 +198,12 @@ class VisibleDetector:
     def flux_from_mag(self, mag):
         """Convert magnitude to flux based on the zeropoint of the detector"""
         return self.estimate_zeropoint() * 10 ** (-mag / 2.5)
+
+    def get_wcs(self, ra, dec):
+        """Returns an astropy.wcs.WCS object"""
+        return get_wcs(
+            self,
+            target_ra=ra,
+            target_dec=dec,
+            distortion_file=f"{PACKAGEDIR}/data/fov_distortion.csv",
+        )
