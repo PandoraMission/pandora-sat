@@ -5,6 +5,7 @@ from functools import lru_cache
 # Third-party
 import astropy.units as u
 import numpy as np
+import pandas as pd
 from astropy.constants import c, h
 from astropy.coordinates import Distance, SkyCoord
 from astropy.io import fits
@@ -236,3 +237,86 @@ def wavelength_to_rgb(wavelength, gamma=0.8):
     G *= 255
     B *= 255
     return np.asarray((int(R), int(G), int(B))) / 256
+
+
+def make_pixel_files():
+    from .irdetector import NIRDetector
+    from .visibledetector import VisibleDetector
+
+    VISDA = VisibleDetector()
+    NIRDA = NIRDetector()
+    df = pd.read_csv(f"{PACKAGEDIR}/data/pixel_vs_wavelength.csv")
+    pixel = np.round(np.arange(-400, 80, 0.25), 5) * u.pixel
+    wav = (
+        np.polyval(np.polyfit(df.Pixel, df.Wavelength, 3), pixel.value)
+        * u.micron
+    )
+
+    sens = NIRDA.sensitivity(wav)
+    mask = sens / sens.max() > 0.0001
+    corr = np.trapz(sens, wav)
+    hdu = fits.TableHDU.from_columns(
+        [
+            fits.Column(
+                name="pixel",
+                format="D",
+                array=pixel.value[mask],
+                unit=pixel.unit.to_string(),
+            ),
+            fits.Column(
+                name="wavelength",
+                format="D",
+                array=wav.value[mask],
+                unit=wav.unit.to_string(),
+            ),
+            fits.Column(
+                name="sensitivity",
+                format="D",
+                array=(sens[mask] / corr),
+                unit=(sens / corr).unit.to_string(),
+            ),
+        ]
+    )
+    hdu.header.append(
+        fits.Card("SENSCORR", corr.value, "correction to apply to sensitivity")
+    )
+    hdu.header.append(
+        fits.Card("CORRUNIT", corr.unit.to_string(), "units of correction")
+    )
+    hdu.writeto(f"{PACKAGEDIR}/data/nirda-wav-solution.fits", overwrite=True)
+
+    wav = np.arange(0.25, 1.3, 0.01) * u.micron
+    pixel = np.zeros(len(wav)) * u.pixel
+    sens = VISDA.sensitivity(wav)
+    corr = np.trapz(sens, wav)
+
+    hdu = fits.TableHDU.from_columns(
+        [
+            fits.Column(
+                name="pixel",
+                format="D",
+                array=pixel.value,
+                unit=pixel.unit.to_string(),
+            ),
+            fits.Column(
+                name="wavelength",
+                format="D",
+                array=wav.value,
+                unit=wav.unit.to_string(),
+            ),
+            fits.Column(
+                name="sensitivity",
+                format="D",
+                array=(sens / corr),
+                unit=(sens / corr).unit.to_string(),
+            ),
+        ]
+    )
+    hdu.header.append(
+        fits.Card("SENSCORR", corr.value, "correction to apply to sensitivity")
+    )
+    hdu.header.append(
+        fits.Card("CORRUNIT", corr.unit.to_string(), "units of correction")
+    )
+    hdu.writeto(f"{PACKAGEDIR}/data/visda-wav-solution.fits", overwrite=True)
+    return

@@ -10,12 +10,13 @@ from astropy.io import votable
 
 from . import PACKAGEDIR
 from .hardware import Hardware
+from .mixins import DetectorMixins
 from .utils import load_vega, photon_energy
 from .wcs import get_wcs
 
 
 @dataclass
-class VisibleDetector:
+class VisibleDetector(DetectorMixins):
     """
     Holds information on the Pandora Visible Detector
     """
@@ -43,9 +44,14 @@ class VisibleDetector:
             )
             r = (self.fieldstop_radius / self.pixel_size).to(u.pix).value
             self.fieldstop = ~((np.abs(C) >= r) | (np.abs(R) >= r))
+            self._add_trace_params("visda")
 
     def __repr__(self):
         return "VisibleDetector"
+
+    @property
+    def name(self):
+        return "VISDA"
 
     @property
     def shape(self):
@@ -166,7 +172,6 @@ class VisibleDetector:
         """Applies a piecewise gain function"""
         if not isinstance(values, u.Quantity):
             raise ValueError("Must pass a quantity.")
-        print(values.ndim)
         x = np.atleast_1d(values)
         gain = np.asarray([0.52, 0.6, 0.61, 0.67]) * u.electron / u.DN
 
@@ -237,3 +242,22 @@ class VisibleDetector:
             target_dec=dec,
             distortion_file=f"{PACKAGEDIR}/data/fov_distortion.csv",
         )
+
+    @property
+    def info(self):
+        zp = self.estimate_zeropoint()
+        return pd.DataFrame(
+            {
+                "Detector Size": f"({self.naxis1.value.astype(int)}, {self.naxis2.value.astype(int)})",
+                "Pixel Scale": f"{self.pixel_scale.value} {self.pixel_scale.unit.to_string('latex')}",
+                "Pixel Size": f"{self.pixel_size.value} {self.pixel_size.unit.to_string('latex')}",
+                "Read Noise": f"{self.read_noise.value} {self.read_noise.unit.to_string('latex')}",
+                "Dark Noise": f"{self.dark.value} {self.dark.unit.to_string('latex')}",
+                "Bias": f"{self.bias.value} {self.bias.unit.to_string('latex')}",
+                "Wavelength Midpoint": f"{self.midpoint.value:.2f} {self.midpoint.unit.to_string('latex')}",
+                "Integration Time": f"{self.integration_time.value} {self.integration_time.unit.to_string('latex')}",
+                "Zeropoint": f"{zp.value:.3e}"
+                + "$\\mathrm{\\frac{erg}{A\\,s\\,cm^{2}}}$",
+            },
+            index=[0],
+        ).T.rename({0: "VISDA"}, axis="columns")

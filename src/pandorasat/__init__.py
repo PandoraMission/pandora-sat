@@ -1,4 +1,4 @@
-__version__ = "0.5.13"
+__version__ = "0.5.15"
 # Standard library
 import os  # noqa
 from glob import glob
@@ -8,12 +8,13 @@ PACKAGEDIR = os.path.abspath(os.path.dirname(__file__))
 # Standard library
 import logging  # noqa: E402
 
-pandorastyle = glob(f"{PACKAGEDIR}/data/pandora.mplstyle")
+PANDORASTYLE = glob(f"{PACKAGEDIR}/data/pandora.mplstyle")
 
 logging.basicConfig()
 logger = logging.getLogger("pandorasat")
 
 from .irdetector import NIRDetector  # noqa: E402, F401
+from .mixins import DetectorMixins  # noqa: E402, F401
 from .pandorasat import PandoraSat  # noqa
 from .visibledetector import VisibleDetector  # noqa: E402, F401
 

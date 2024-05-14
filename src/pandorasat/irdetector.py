@@ -10,26 +10,27 @@ import pandas as pd
 
 from . import PACKAGEDIR
 from .hardware import Hardware
-from .utils import load_vega, photon_energy
+from .mixins import DetectorMixins
+from .utils import photon_energy
 from .wcs import get_wcs
 
 
 @dataclass
-class NIRDetector:
+class NIRDetector(DetectorMixins):
     """
     Holds information on the Pandora IR detector
     """
 
     def __post_init__(self):
         """Some detector specific functions to run on initialization"""
-        # self.flat = fits.open(
-        #     np.sort(
-        #         np.atleast_1d(glob(f"{PACKAGEDIR}/data/flatfield_NIRDA*.fits"))
-        #     )[-1]
-        # )[1].data
+        self._add_trace_params("nirda")
 
     def __repr__(self):
         return "NIRDetector"
+
+    @property
+    def name(self):
+        return "NIRDA"
 
     @property
     def shape(self):
@@ -190,23 +191,6 @@ class NIRDetector:
         w = np.arange(0.1, 3, 0.005) * u.micron
         return np.average(w, weights=self.sensitivity(w))
 
-    def estimate_zeropoint(self):
-        """Use Vega SED to estimate the zeropoint of the detector"""
-        wavelength, spectrum = load_vega()
-        sens = self.sensitivity(wavelength)
-        zeropoint = np.trapz(spectrum * sens, wavelength) / np.trapz(
-            sens, wavelength
-        )
-        return zeropoint
-
-    def mag_from_flux(self, flux):
-        """Convert flux to magnitude based on the zeropoint of the detector"""
-        return -2.5 * np.log10(flux / self.estimate_zeropoint())
-
-    def flux_from_mag(self, mag):
-        """Convert magnitude to flux based on the zeropoint of the detector"""
-        return self.estimate_zeropoint() * 10 ** (-mag / 2.5)
-
     def get_wcs(self, ra, dec):
         """Returns an astropy.wcs.WCS object"""
         return get_wcs(
@@ -217,3 +201,22 @@ class NIRDetector:
             crpix2=400,
             distortion_file=f"{PACKAGEDIR}/data/fov_distortion.csv",
         )
+
+    @property
+    def info(self):
+        zp = self.estimate_zeropoint()
+        return pd.DataFrame(
+            {
+                "Detector Size": "(2048, 2048)",
+                "Subarray Size": "(400, 80)",
+                "Pixel Scale": f"{self.pixel_scale.value} {self.pixel_scale.unit.to_string('latex')}",
+                "Pixel Size": f"{self.pixel_size.value} {self.pixel_size.unit.to_string('latex')}",
+                "Dark Noise": f"{self.dark.value} {self.dark.unit.to_string('latex')}",
+                "Wavelength Midpoint": f"{self.midpoint.value:.2f} {self.midpoint.unit.to_string('latex')}",
+                "Pixel Read Time": f"{self.pixel_read_time.value:.1e} {self.pixel_read_time.unit.to_string('latex')}",
+                "Zeropoint": f"{zp.value:.3e}"
+                + "$\\mathrm{\\frac{erg}{A\\,s\\,cm^{2}}}$",
+                "R @ 1.3$\\mu m$": 65,
+            },
+            index=[0],
+        ).T.rename({0: "NIRDA"}, axis="columns")
