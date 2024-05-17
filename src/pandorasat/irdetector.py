@@ -197,8 +197,8 @@ class NIRDetector(DetectorMixins):
             self,
             target_ra=ra,
             target_dec=dec,
-            crpix1=80,
-            crpix2=400,
+            crpix1=self.subarray_size[1] // 2,
+            crpix2=100,
             distortion_file=f"{PACKAGEDIR}/data/fov_distortion.csv",
         )
 
