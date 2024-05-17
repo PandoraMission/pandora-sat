@@ -1,4 +1,4 @@
-__version__ = "0.5.16"
+__version__ = "0.5.17"
 # Standard library
 import logging  # noqa: E402
 import os  # noqa
@@ -11,6 +11,7 @@ from rich.console import Console  # noqa: E402
 from rich.logging import RichHandler  # noqa: E402
 
 PACKAGEDIR = os.path.abspath(os.path.dirname(__file__))
+TESTDIR = "/".join(PACKAGEDIR.split("/")[:-2]) + "/tests/"
 PANDORASTYLE = glob(f"{PACKAGEDIR}/data/pandora.mplstyle")
 
 

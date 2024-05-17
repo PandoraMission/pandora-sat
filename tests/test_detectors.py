@@ -3,11 +3,12 @@ import pickle
 
 # Third-party
 import astropy.units as u
+import matplotlib.pyplot as plt
 import numpy as np
 from astropy.wcs import WCS, Sip
 
 # First-party/Local
-from pandorasat import PACKAGEDIR, PandoraSat
+from pandorasat import PACKAGEDIR, PANDORASTYLE, TESTDIR, PandoraSat
 from pandorasat.irdetector import NIRDetector
 from pandorasat.visibledetector import VisibleDetector
 
@@ -99,3 +100,14 @@ def test_detector_snr():
     ).value
     assert (signal / np.sqrt(signal)) > 1000
     return
+
+
+def test_plots():
+    """Make some basic files and figures to show the detector information."""
+    for detector in [VisibleDetector(), NIRDetector()]:
+        with open(f"{TESTDIR}/output/{detector.name}.md", "w") as file:
+            file.write(detector.info.to_markdown())
+        with plt.style.context(PANDORASTYLE):
+            detector.plot_sensitivity()
+            plt.savefig(f"{TESTDIR}/output/{detector.name}.png", dpi=150)
+            plt.close("all")

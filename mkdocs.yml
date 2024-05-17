@@ -1,25 +1,31 @@
 site_name: PandoraSat
 nav:
-    - Home: README.md
-    - API:
-      - PandoraSat: pandorasat.md
-      - NIRDA: irdetector.md
-      - VISDA: visibledetector.md
-      - Hardware: hardware.md
-      - Orbit: orbit.md
-    - Notebooks:
-      - PandoraSat Demo: intro-to-pandorasat.ipynb
+  - Home: README.md
+  - NIR Detector: irdetector.md
+  - Visible Detector: visibledetector.md
 theme:
   name: "material"
   icon:
-      logo: material/clipboard
+    logo: material/clipboard
 repo_url: https://github.com/pandoramission/pandora-sat
 plugins:
   - search
-  - mkdocs-jupyter:
-      execute: False
-      include_source: True
-      ignore_h1_titles: False
+  - include-markdown
   - mkdocstrings:
       watch:
         - src/pandorasat
+      default_handler: python      
+      handlers:
+        python:
+          options:
+            show_source: false
+            filters:
+              - "!^_"
+markdown_extensions:
+  - pymdownx.arithmatex:
+      generic: true
+  - tables
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js

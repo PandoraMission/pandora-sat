@@ -131,7 +131,7 @@ class NIRDetector(DetectorMixins):
         sw_coeffs = np.array([0.65830, -0.05668, 0.25580, -0.08350])
         sw_exponential = 100.0
         sw_wavecut_red = 1.69  # changed from 2.38 for Pandora
-        sw_wavecut_blue = 0.75  # new for Pandora
+        sw_wavecut_blue = 0.85  # new for Pandora
         with np.errstate(invalid="ignore", over="ignore"):
             sw_qe = (
                 sw_coeffs[0]

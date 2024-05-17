@@ -6,26 +6,35 @@ This Python package contains metadata for Pandora and **basic** functions descri
 
 ### Installation
 
-Eventually, to install this package you will be able to use
+To install you can use
 
 ```
 pip install pandora-sat --upgrade
 ```
 
-For now, clone this repository, enter the `pandora-sat` directory, and execute the command `poetry install` to build the package locally. Make sure to upgrade regularly to get the latest estimates of the Pandora meta data.
+You should update your package often, as we frequently put out new versions with updated Current Best Estimates, and some limited new functionality. Check your version number using
 
+```
+import pandorasat as ps
+ps.__version__
+```
 
-### Example Usage
+## Pandora Information
+
+This repository helps you understand what the Pandora SmallSat will be capabale of.
+
+## Example Usage
 
 Below is an example usage of some of the functionality in this package. In general, this package will allow you to get metadata from specific subsystems of Pandora.
 
 ```python
-from pandorasat import PandoraSat
-p = PandoraSat()
-print(p.NIRDA.pixel_scale)
-print(p.Hardware.mirror_diameter)
-print(p.VISDA.naxis1)
-print(p.Orbit.period)
+from pandorasat import VisibleDetector, NIRDetector
+visda = VisibleDetector()
+visda.pixel_scale
+visda.pixel_size
+
+nirda = NIRDetector()
+nirda.plot_sensitivity()
 ```
 
 See our API documentation for full details on the metadata available in this package.
