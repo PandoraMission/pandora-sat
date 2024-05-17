@@ -72,7 +72,7 @@ class NIRDetector(DetectorMixins):
     def frame_time(self, array_size=None):
         if array_size is None:
             array_size = self.subarray_size
-        return np.product(array_size) * u.pixel * self.pixel_read_time
+        return np.prod(array_size) * u.pixel * self.pixel_read_time
 
     @property
     def dark(self):
@@ -80,7 +80,11 @@ class NIRDetector(DetectorMixins):
 
     @property
     def read_noise(self):
-        raise ValueError("Not Set")
+        return 16 * u.electron
+
+    @property
+    def bias(self):
+        return 46000 * u.electron
 
     @property
     def saturation_limit(self):
@@ -198,7 +202,7 @@ class NIRDetector(DetectorMixins):
             target_ra=ra,
             target_dec=dec,
             crpix1=self.subarray_size[1] // 2,
-            crpix2=100,
+            crpix2=300,  # This is fixed to ensure that the spectrum is roughly in the middle of the sensor...
             distortion_file=f"{PACKAGEDIR}/data/fov_distortion.csv",
         )
 
