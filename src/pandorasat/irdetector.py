@@ -80,11 +80,15 @@ class NIRDetector(DetectorMixins):
 
     @property
     def read_noise(self):
-        return 16 * u.electron
+        return 22 * u.electron
 
     @property
     def bias(self):
         return 46000 * u.electron
+
+    @property
+    def bias_uncertainty(self):
+        return (185*2) * u.electron
 
     @property
     def saturation_limit(self):
@@ -224,3 +228,8 @@ class NIRDetector(DetectorMixins):
             },
             index=[0],
         ).T.rename({0: "NIRDA"}, axis="columns")
+
+
+    @property
+    def background_rate(self):
+        return 4 * u.electron / u.second

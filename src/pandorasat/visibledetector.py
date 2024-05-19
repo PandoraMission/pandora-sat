@@ -261,3 +261,7 @@ class VisibleDetector(DetectorMixins):
             },
             index=[0],
         ).T.rename({0: "VISDA"}, axis="columns")
+
+    @property
+    def background_rate(self):
+        return 2 * u.electron / u.second
