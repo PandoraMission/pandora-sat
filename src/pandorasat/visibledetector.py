@@ -42,7 +42,7 @@ class VisibleDetector(DetectorMixins):
                 / 2
             )
             r = (self.fieldstop_radius / self.pixel_size).to(u.pix).value
-            self.fieldstop = ~((np.abs(C) >= r) | (np.abs(R) >= r))
+            self.fieldstop = ~(np.hypot(R, C) > r)
             self._add_trace_params("visda")
 
     def __repr__(self):
