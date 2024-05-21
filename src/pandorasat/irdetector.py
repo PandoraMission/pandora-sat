@@ -88,7 +88,7 @@ class NIRDetector(DetectorMixins):
 
     @property
     def bias_uncertainty(self):
-        return (185*2) * u.electron
+        return (185 * 2) * u.electron
 
     @property
     def saturation_limit(self):
@@ -199,12 +199,13 @@ class NIRDetector(DetectorMixins):
         w = np.arange(0.1, 3, 0.005) * u.micron
         return np.average(w, weights=self.sensitivity(w))
 
-    def get_wcs(self, ra, dec):
+    def get_wcs(self, ra, dec, theta=u.Quantity(0, unit="degree")):
         """Returns an astropy.wcs.WCS object"""
         return get_wcs(
             self,
             target_ra=ra,
             target_dec=dec,
+            theta=theta,
             crpix1=self.subarray_size[1] // 2,
             crpix2=300,  # This is fixed to ensure that the spectrum is roughly in the middle of the sensor...
             distortion_file=f"{PACKAGEDIR}/data/fov_distortion.csv",
@@ -228,7 +229,6 @@ class NIRDetector(DetectorMixins):
             },
             index=[0],
         ).T.rename({0: "NIRDA"}, axis="columns")
-
 
     @property
     def background_rate(self):

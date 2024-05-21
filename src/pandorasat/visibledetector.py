@@ -6,7 +6,6 @@ from dataclasses import dataclass
 import astropy.units as u
 import numpy as np
 import pandas as pd
-from astropy.io import votable
 
 from . import PACKAGEDIR
 from .hardware import Hardware
@@ -124,12 +123,7 @@ class VisibleDetector(DetectorMixins):
         qe : npt.NDArray
             Array of the quantum efficiency of the detector
         """
-        df = (
-            votable.parse(f"{PACKAGEDIR}/data/Pandora.Pandora.Visible.xml")
-            .get_first_table()
-            .to_table()
-            .to_pandas()
-        )
+        df = pd.read_csv(f"{PACKAGEDIR}/data/Pandora_Visible_QE.csv")
         wav, transmission = np.asarray(df.Wavelength) * u.angstrom, np.asarray(
             df.Transmission
         )
@@ -234,12 +228,13 @@ class VisibleDetector(DetectorMixins):
         """Convert magnitude to flux based on the zeropoint of the detector"""
         return self.estimate_zeropoint() * 10 ** (-mag / 2.5)
 
-    def get_wcs(self, ra, dec):
+    def get_wcs(self, ra, dec, theta=u.Quantity(0, unit="degree")):
         """Returns an astropy.wcs.WCS object"""
         return get_wcs(
             self,
             target_ra=ra,
             target_dec=dec,
+            theta=theta,
             distortion_file=f"{PACKAGEDIR}/data/fov_distortion.csv",
         )
 
