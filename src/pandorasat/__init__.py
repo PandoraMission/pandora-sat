@@ -1,4 +1,4 @@
-__version__ = "0.5.22"
+__version__ = "0.5.23"
 # Standard library
 import logging  # noqa: E402
 import os  # noqa
