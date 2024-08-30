@@ -69,7 +69,7 @@ class VisibleDetector(DetectorMixins):
 
     @property
     def bits_per_pixel(self):
-        return 32*u.bit/u.pixel
+        return 32 * u.bit / u.pixel
 
     @property
     def naxis1(self):
