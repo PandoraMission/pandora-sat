@@ -68,6 +68,10 @@ class VisibleDetector(DetectorMixins):
         return 6.5 * u.um / u.pixel
 
     @property
+    def bits_per_pixel(self):
+        return 32*u.bit/u.pixel
+
+    @property
     def naxis1(self):
         """WCS's are COLUMN major, so naxis1 is the number of columns"""
         return self.shape[1] * u.pixel
