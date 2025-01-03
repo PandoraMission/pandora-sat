@@ -98,7 +98,7 @@ class VisibleDetector(DetectorMixins):
 
     @property
     def bias(self):
-        """Detector bias""""
+        """Detector bias"""
         return 100 * u.electron
 
     @property
