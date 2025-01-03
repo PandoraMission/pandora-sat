@@ -69,6 +69,7 @@ class VisibleDetector(DetectorMixins):
 
     @property
     def bits_per_pixel(self):
+        """Number of bits per pixel"""
         return 32 * u.bit / u.pixel
 
     @property
@@ -87,25 +88,31 @@ class VisibleDetector(DetectorMixins):
 
     @property
     def dark(self):
+        """Dark Noise"""
         return 1 * u.electron / u.second
 
     @property
     def read_noise(self):
+        """Read Noise"""
         return 1.5 * u.electron
 
     @property
     def bias(self):
+        """Detector bias"""
         return 100 * u.electron
 
     @property
     def integration_time(self):
+        "Integration time"
         return 0.2 * u.second
 
     @property
     def fieldstop_radius(self):
+        "Radius of the fieldstop"
         return 6.5 * u.mm
 
     def throughput(self, wavelength: u.Quantity):
+        """Throughput at the specified wavelength(s)"""
         df = pd.read_csv(f"{PACKAGEDIR}/data/dichroic-transmission.csv")
         throughput = (
             100 - np.interp(wavelength.to(u.nm).value, *np.asarray(df).T)
@@ -263,4 +270,5 @@ class VisibleDetector(DetectorMixins):
 
     @property
     def background_rate(self):
+        """Detector background rate"""
         return 2 * u.electron / u.second

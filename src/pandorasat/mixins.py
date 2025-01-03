@@ -33,6 +33,7 @@ class DetectorMixins:
         )
 
     def plot_sensitivity(self, ax=None):
+        """Plot the sensitivity of the detector as a function of wavelength"""
         if ax is None:
             _, ax = plt.subplots()
         with plt.style.context(PANDORASTYLE):

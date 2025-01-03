@@ -49,6 +49,7 @@ class NIRDetector(DetectorMixins):
 
     @property
     def bits_per_pixel(self):
+        """Number of bits per pixel"""
         return 16 * u.bit / u.pixel
 
     @property
@@ -67,39 +68,48 @@ class NIRDetector(DetectorMixins):
 
     @property
     def pixel_read_time(self):
+        """Pixel read time"""
         return 1e-5 * u.second / u.pixel
 
     @property
     def subarray_size(self):
+        """Size of standard subarray"""
         return (400, 80)
 
     def frame_time(self, array_size=None):
+        """Time to read out one frame of the subarray"""
         if array_size is None:
             array_size = self.subarray_size
         return np.prod(array_size) * u.pixel * self.pixel_read_time
 
     @property
     def dark(self):
+        """Dark noise"""
         return 1 * u.electron / u.second
 
     @property
     def read_noise(self):
+        """Read noise"""
         return 22 * u.electron
 
     @property
     def bias(self):
+        """NIRDA detector bias"""
         return 46000 * u.electron
 
     @property
     def bias_uncertainty(self):
+        "Uncertainty in NIRDA detector bias"
         return (185 * 2) * u.electron
 
     @property
     def saturation_limit(self):
+        "NIRDA saturation limit"
         raise ValueError("Not Set")
 
     @property
     def non_linearity(self):
+        "NIRDA non linearity"
         raise ValueError("Not Set")
 
     def throughput(self, wavelength: u.Quantity):
@@ -112,6 +122,7 @@ class NIRDetector(DetectorMixins):
 
     @property
     def gain(self):
+        "detector gain"
         return 0.5 * u.electron / u.DN
 
     def apply_gain(self, values: u.Quantity):
@@ -236,4 +247,5 @@ class NIRDetector(DetectorMixins):
 
     @property
     def background_rate(self):
+        "NIRDA background rate"
         return 4 * u.electron / u.second
