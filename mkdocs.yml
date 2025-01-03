@@ -3,6 +3,9 @@ nav:
   - Home: README.md
   - NIR Detector: irdetector.md
   - Visible Detector: visibledetector.md
+  - Hardware: hardware.md
+  - Orbit: orbit.md
+  
 theme:
   name: "material"
   icon:

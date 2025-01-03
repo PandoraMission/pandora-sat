@@ -9,7 +9,7 @@ This Python package contains metadata for Pandora and **basic** functions descri
 To install you can use
 
 ```
-pip install pandora-sat --upgrade
+pip install pandorasat --upgrade
 ```
 
 You should update your package often, as we frequently put out new versions with updated Current Best Estimates, and some limited new functionality. Check your version number using
