@@ -115,9 +115,7 @@ class NIRDetector(DetectorMixins):
     def throughput(self, wavelength: u.Quantity):
         """Throughput at the specified wavelength(s)"""
         df = pd.read_csv(f"{PACKAGEDIR}/data/dichroic-transmission.csv")
-        throughput = (
-            np.interp(wavelength.to(u.nm).value, *np.asarray(df).T) / 100
-        )
+        throughput = np.interp(wavelength.to(u.nm).value, *np.asarray(df).T) / 100
         return throughput**2 * 0.71
 
     @property
@@ -167,8 +165,7 @@ class NIRDetector(DetectorMixins):
                 wavelength.to(u.micron).value > sw_wavecut_red,
                 sw_qe
                 * np.exp(
-                    (sw_wavecut_red - wavelength.to(u.micron).value)
-                    * sw_exponential
+                    (sw_wavecut_red - wavelength.to(u.micron).value) * sw_exponential
                 ),
                 sw_qe,
             )
@@ -247,5 +244,15 @@ class NIRDetector(DetectorMixins):
 
     @property
     def background_rate(self):
+        "NIRDA background rate"
+        return 4 * u.electron / u.second
+
+    @property
+    def stray_light_rate(self):
+        "NIRDA background rate"
+        return 2 * u.electron / u.second
+
+    @property
+    def thermal_background_rate(self):
         "NIRDA background rate"
         return 4 * u.electron / u.second

@@ -1,4 +1,3 @@
-__version__ = "0.5.23"
 # Standard library
 import logging  # noqa: E402
 import os  # noqa
@@ -13,6 +12,18 @@ from rich.logging import RichHandler  # noqa: E402
 PACKAGEDIR = os.path.abspath(os.path.dirname(__file__))
 TESTDIR = "/".join(PACKAGEDIR.split("/")[:-2]) + "/tests/"
 PANDORASTYLE = glob(f"{PACKAGEDIR}/data/pandora.mplstyle")
+
+from importlib.metadata import PackageNotFoundError, version  # noqa
+
+
+def get_version():
+    try:
+        return version("pandorasat")
+    except PackageNotFoundError:
+        return "unknown"
+
+
+__version__ = get_version()
 
 
 def get_logger(name="pandoralog"):
@@ -52,9 +63,7 @@ class PandoraLogger(logging.Logger):
             self.spinner_event = None
 
     def _spinner(self, message):
-        with self.handler.console.status(
-            "[bold green]" + message
-        ) as status:  # noqa
+        with self.handler.console.status("[bold green]" + message) as status:  # noqa
             while not self.spinner_event.is_set():
                 time.sleep(0.1)
 
