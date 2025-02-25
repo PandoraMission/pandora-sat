@@ -115,7 +115,9 @@ class NIRDetector(DetectorMixins):
     def throughput(self, wavelength: u.Quantity):
         """Optical throughput at the specified wavelength(s)"""
         df = pd.read_csv(f"{PACKAGEDIR}/data/nir_optical_throughput.csv")
-        throughput = np.interp(wavelength.to(u.nm).value, *np.asarray(df.values).T)
+        throughput = np.interp(
+            wavelength.to(u.nm).value, *np.asarray(df.values).T
+        )
         throughput[wavelength.to(u.nm).value < 380] *= 0
         return throughput
 
@@ -166,7 +168,8 @@ class NIRDetector(DetectorMixins):
                 wavelength.to(u.micron).value > sw_wavecut_red,
                 sw_qe
                 * np.exp(
-                    (sw_wavecut_red - wavelength.to(u.micron).value) * sw_exponential
+                    (sw_wavecut_red - wavelength.to(u.micron).value)
+                    * sw_exponential
                 ),
                 sw_qe,
             )

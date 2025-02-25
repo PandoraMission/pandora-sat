@@ -13,6 +13,7 @@ PACKAGEDIR = os.path.abspath(os.path.dirname(__file__))
 TESTDIR = "/".join(PACKAGEDIR.split("/")[:-2]) + "/tests/"
 PANDORASTYLE = glob(f"{PACKAGEDIR}/data/pandora.mplstyle")
 
+# Standard library
 from importlib.metadata import PackageNotFoundError, version  # noqa
 
 
@@ -63,7 +64,9 @@ class PandoraLogger(logging.Logger):
             self.spinner_event = None
 
     def _spinner(self, message):
-        with self.handler.console.status("[bold green]" + message) as status:  # noqa
+        with self.handler.console.status(
+            "[bold green]" + message
+        ) as status:  # noqa
             while not self.spinner_event.is_set():
                 time.sleep(0.1)
 

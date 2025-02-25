@@ -115,7 +115,9 @@ class VisibleDetector(DetectorMixins):
     def throughput(self, wavelength: u.Quantity):
         """Optical throughput at the specified wavelength(s)"""
         df = pd.read_csv(f"{PACKAGEDIR}/data/visible_optical_throughput.csv")
-        throughput = np.interp(wavelength.to(u.nm).value, *np.asarray(df.values).T)
+        throughput = np.interp(
+            wavelength.to(u.nm).value, *np.asarray(df.values).T
+        )
         throughput[wavelength.to(u.nm).value < 380] *= 0
         return throughput
 
@@ -226,7 +228,9 @@ class VisibleDetector(DetectorMixins):
         """Use Vega SED to estimate the zeropoint of the detector"""
         wavelength, spectrum = load_vega()
         sens = self.sensitivity(wavelength)
-        zeropoint = np.trapz(spectrum * sens, wavelength) / np.trapz(sens, wavelength)
+        zeropoint = np.trapz(spectrum * sens, wavelength) / np.trapz(
+            sens, wavelength
+        )
         return zeropoint
 
     def mag_from_flux(self, flux):
