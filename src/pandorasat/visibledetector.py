@@ -1,4 +1,5 @@
 """Holds metadata and methods on Pandora VISDA"""
+
 # Standard library
 from dataclasses import dataclass
 
@@ -112,13 +113,11 @@ class VisibleDetector(DetectorMixins):
         return 6.5 * u.mm
 
     def throughput(self, wavelength: u.Quantity):
-        """Throughput at the specified wavelength(s)"""
-        df = pd.read_csv(f"{PACKAGEDIR}/data/dichroic-transmission.csv")
-        throughput = (
-            100 - np.interp(wavelength.to(u.nm).value, *np.asarray(df).T)
-        ) / 100
+        """Optical throughput at the specified wavelength(s)"""
+        df = pd.read_csv(f"{PACKAGEDIR}/data/visible_optical_throughput.csv")
+        throughput = np.interp(wavelength.to(u.nm).value, *np.asarray(df.values).T)
         throughput[wavelength.to(u.nm).value < 380] *= 0
-        return throughput * 0.752
+        return throughput
 
     def qe(self, wavelength):
         """
@@ -135,8 +134,9 @@ class VisibleDetector(DetectorMixins):
             Array of the quantum efficiency of the detector
         """
         df = pd.read_csv(f"{PACKAGEDIR}/data/Pandora_Visible_QE.csv")
-        wav, transmission = np.asarray(df.Wavelength) * u.angstrom, np.asarray(
-            df.Transmission
+        wav, transmission = (
+            np.asarray(df.Wavelength) * u.angstrom,
+            np.asarray(df.Transmission),
         )
         return (
             np.interp(wavelength, wav, transmission, left=0, right=0)
@@ -226,9 +226,7 @@ class VisibleDetector(DetectorMixins):
         """Use Vega SED to estimate the zeropoint of the detector"""
         wavelength, spectrum = load_vega()
         sens = self.sensitivity(wavelength)
-        zeropoint = np.trapz(spectrum * sens, wavelength) / np.trapz(
-            sens, wavelength
-        )
+        zeropoint = np.trapz(spectrum * sens, wavelength) / np.trapz(sens, wavelength)
         return zeropoint
 
     def mag_from_flux(self, flux):

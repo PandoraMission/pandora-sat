@@ -4,6 +4,7 @@ src/pandorasat/data/phoenix
 src/pandorasat/data/pandora_*_20220506.*
 src/pandorasat/data/pandora_*_20210602.*
 src/pandorasat/data/flatfield*.fits
+filters/
 
 # Mac things
 .DS_Store

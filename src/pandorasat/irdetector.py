@@ -113,10 +113,11 @@ class NIRDetector(DetectorMixins):
         raise ValueError("Not Set")
 
     def throughput(self, wavelength: u.Quantity):
-        """Throughput at the specified wavelength(s)"""
-        df = pd.read_csv(f"{PACKAGEDIR}/data/dichroic-transmission.csv")
-        throughput = np.interp(wavelength.to(u.nm).value, *np.asarray(df).T) / 100
-        return throughput**2 * 0.71
+        """Optical throughput at the specified wavelength(s)"""
+        df = pd.read_csv(f"{PACKAGEDIR}/data/nir_optical_throughput.csv")
+        throughput = np.interp(wavelength.to(u.nm).value, *np.asarray(df.values).T)
+        throughput[wavelength.to(u.nm).value < 380] *= 0
+        return throughput
 
     @property
     def gain(self):
