@@ -1,4 +1,5 @@
 """Utilities for plotting, animating, and saving gifs."""
+
 # Standard library
 from typing import Optional
 

@@ -80,8 +80,8 @@ def get_sky_catalog(
     all_keys = base_keys + gaia_keys
 
     query_str = f"""
-    SELECT {f'TOP {limit} ' if limit is not None else ''}* FROM (
-        SELECT gaia.{', gaia.'.join(all_keys)}, dr2.teff_val AS dr2_teff_val,
+    SELECT {f"TOP {limit} " if limit is not None else ""}* FROM (
+        SELECT gaia.{", gaia.".join(all_keys)}, dr2.teff_val AS dr2_teff_val,
         dr2.rv_template_logg AS dr2_logg, tmass.j_m, tmass.j_msigcom, tmass.ph_qual, DISTANCE(
         POINT({u.Quantity(ra, u.deg).value}, {u.Quantity(dec, u.deg).value}),
         POINT(gaia.ra, gaia.dec)) AS ang_sep,
@@ -96,7 +96,7 @@ def get_sky_catalog(
         xjoin.original_psc_source_id = tmass.designation
         WHERE 1 = CONTAINS(
         POINT({u.Quantity(ra, u.deg).value}, {u.Quantity(dec, u.deg).value}),
-        CIRCLE(gaia.ra, gaia.dec, {(u.Quantity(radius, u.deg) + 50*u.arcsecond).value}))
+        CIRCLE(gaia.ra, gaia.dec, {(u.Quantity(radius, u.deg) + 50 * u.arcsecond).value}))
         AND gaia.parallax IS NOT NULL
         AND gaia.phot_bp_mean_mag > {gbpmagnitude_range[0]}
         AND gaia.phot_bp_mean_mag < {gbpmagnitude_range[1]}) AS subquery
@@ -192,7 +192,6 @@ def load_vega():
 
 
 def wavelength_to_rgb(wavelength, gamma=0.8):
-
     """This converts a given wavelength of light to an
     approximate RGB color value. The wavelength must be given
     in nanometers in the range from 380 nm through 750 nm
@@ -253,26 +252,25 @@ def make_pixel_files():
     )
 
     sens = NIRDA.sensitivity(wav)
-    mask = sens / sens.max() > 0.0001
     corr = np.trapz(sens, wav)
     hdu = fits.TableHDU.from_columns(
         [
             fits.Column(
                 name="pixel",
                 format="D",
-                array=pixel.value[mask],
+                array=pixel.value,
                 unit=pixel.unit.to_string(),
             ),
             fits.Column(
                 name="wavelength",
                 format="D",
-                array=wav.value[mask],
+                array=wav.value,
                 unit=wav.unit.to_string(),
             ),
             fits.Column(
                 name="sensitivity",
                 format="D",
-                array=(sens[mask] / corr),
+                array=(sens / corr),
                 unit=(sens / corr).unit.to_string(),
             ),
         ]

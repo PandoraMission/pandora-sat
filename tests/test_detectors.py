@@ -5,7 +5,7 @@ import numpy as np
 from astropy.wcs import WCS, Sip
 
 # First-party/Local
-from pandorasat import PANDORASTYLE, TESTDIR, PandoraSat
+from pandorasat import DOCSDIR, PANDORASTYLE, PandoraSat
 from pandorasat.irdetector import NIRDetector
 from pandorasat.visibledetector import VisibleDetector
 
@@ -102,9 +102,9 @@ def test_gain():
 def test_plots():
     """Make some basic files and figures to show the detector information."""
     for detector in [VisibleDetector(), NIRDetector()]:
-        with open(f"{TESTDIR}/output/{detector.name}.md", "w") as file:
+        with open(f"{DOCSDIR}/info/{detector.name}.md", "w") as file:
             file.write(detector.info.to_markdown())
         with plt.style.context(PANDORASTYLE):
             detector.plot_sensitivity()
-            plt.savefig(f"{TESTDIR}/output/{detector.name}.png", dpi=150)
+            plt.savefig(f"{DOCSDIR}/info/{detector.name}.png", dpi=150)
             plt.close("all")

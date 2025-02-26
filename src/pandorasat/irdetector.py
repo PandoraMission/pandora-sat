@@ -83,29 +83,44 @@ class NIRDetector(DetectorMixins):
         return np.prod(array_size) * u.pixel * self.pixel_read_time
 
     @property
-    def dark(self):
-        """Dark noise"""
+    def zodiacal_background_rate(self):
+        "Zodiacal light background rate"
+        return 4 * u.electron / u.second
+
+    @property
+    def stray_light_rate(self):
+        "Stray light rate"
+        return 2 * u.electron / u.second
+
+    @property
+    def thermal_background_rate(self):
+        "NIRDA thermal background rate"
+        return 10 * u.electron / u.second
+
+    @property
+    def dark_rate(self):
+        """Dark signal rate, detector only, no thermal"""
         return 1 * u.electron / u.second
 
     @property
     def read_noise(self):
         """Read noise"""
-        return 22 * u.electron
+        return 18 * u.electron
 
     @property
     def bias(self):
         """NIRDA detector bias"""
-        return 46000 * u.electron
+        return 6000 * u.electron
 
     @property
     def bias_uncertainty(self):
-        "Uncertainty in NIRDA detector bias"
+        "Uncertainty in NIRDA detector bias. Every integration has a different bias."
         return (185 * 2) * u.electron
 
     @property
     def saturation_limit(self):
-        "NIRDA saturation limit"
-        raise ValueError("Not Set")
+        "NIRDA saturation limit. Bias contributes to saturation."
+        return 80000 * u.electron
 
     @property
     def non_linearity(self):
@@ -124,7 +139,8 @@ class NIRDetector(DetectorMixins):
     @property
     def gain(self):
         "detector gain"
-        return 0.5 * u.electron / u.DN
+        # return 0.5 * u.electron / u.DN
+        return 2 * u.electron / u.DN
 
     def apply_gain(self, values: u.Quantity):
         """Applies a single gain value"""
@@ -236,7 +252,7 @@ class NIRDetector(DetectorMixins):
                 "Subarray Size": "(400, 80)",
                 "Pixel Scale": f"{self.pixel_scale.value} {self.pixel_scale.unit.to_string('latex')}",
                 "Pixel Size": f"{self.pixel_size.value} {self.pixel_size.unit.to_string('latex')}",
-                "Dark Noise": f"{self.dark.value} {self.dark.unit.to_string('latex')}",
+                "Dark Noise": f"{self.dark_rate.value} {self.dark_rate.unit.to_string('latex')}",
                 "Wavelength Midpoint": f"{self.midpoint.value:.2f} {self.midpoint.unit.to_string('latex')}",
                 "Pixel Read Time": f"{self.pixel_read_time.value:.1e} {self.pixel_read_time.unit.to_string('latex')}",
                 "Zeropoint": f"{zp.value:.3e}"
@@ -245,18 +261,3 @@ class NIRDetector(DetectorMixins):
             },
             index=[0],
         ).T.rename({0: "NIRDA"}, axis="columns")
-
-    @property
-    def background_rate(self):
-        "NIRDA background rate"
-        return 4 * u.electron / u.second
-
-    @property
-    def stray_light_rate(self):
-        "NIRDA background rate"
-        return 2 * u.electron / u.second
-
-    @property
-    def thermal_background_rate(self):
-        "NIRDA background rate"
-        return 4 * u.electron / u.second

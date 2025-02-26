@@ -1,22 +1,20 @@
 # Standard library
 import contextlib
 import functools
-import logging
 import os
+import shutil
+import tarfile
 import warnings
 from glob import glob
-from pathlib import Path
 
 # Third-party
 import astropy.units as u
 import numpy as np
 import requests
 from astroquery import log as asqlog
+from tqdm import tqdm
 
-# from . import PACKAGEDIR
-
-logging.basicConfig()
-logger = logging.getLogger("pandorasat")
+from . import CACHEDIR, PHOENIXGRIDPATH, PHOENIXPATH, logger
 
 __all__ = [
     "download_phoenix_grid",
@@ -24,9 +22,6 @@ __all__ = [
     "build_phoenix",
     "get_phoenix_model",
 ]
-CACHEDIR = f"{Path.home()}/.pandorasat"
-PHOENIXPATH = f"{CACHEDIR}/data/phoenix/"
-PHOENIXGRIDPATH = f"{CACHEDIR}/data/phoenix/grid/phoenix/phoenixm00/"
 
 
 def download_file(file_url, file_path):
@@ -40,14 +35,6 @@ def download_file(file_url, file_path):
 
 
 def download_phoenix_grid():
-    # Standard library
-    import shutil
-    import tarfile
-
-    # Third-party
-    import numpy as np
-    from tqdm import tqdm
-
     os.makedirs(CACHEDIR, exist_ok=True)
     if os.path.isdir(PHOENIXPATH):
         shutil.rmtree(PHOENIXPATH)

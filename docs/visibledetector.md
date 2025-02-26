@@ -2,13 +2,11 @@
 
 The `VisibleDetector` class shows you what to expect from the Visible side of Pandora. The key information on the detector is given below.
 
-<center>
 ![VisibleDetector Sensitivity](info/VISDA.png)
 
 {%
    include-markdown "info/VISDA.md"
 %}
-</center>
 
 ## API Documentation for `pandorasat.VisibleDetector`
 
