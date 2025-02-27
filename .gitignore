@@ -6,6 +6,8 @@ src/pandorasat/data/pandora_*_20210602.*
 src/pandorasat/data/flatfield*.fits
 filters/
 
+poetry.lock
+
 # Mac things
 .DS_Store
 
