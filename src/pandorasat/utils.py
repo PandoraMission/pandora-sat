@@ -119,23 +119,16 @@ def get_sky_catalog(
         "ang_sep": tbl["ang_sep"].data.filled(np.nan) * u.deg,
     }
     cat["teff"] = (
-        tbl["teff_gspphot"].data.filled(
-            tbl["dr2_teff_val"].data.filled(np.nan)
-        )
-        * u.K
+        tbl["teff_gspphot"].data.filled(tbl["dr2_teff_val"].data.filled(np.nan)) * u.K
     )
-    cat["logg"] = tbl["logg_gspphot"].data.filled(
-        tbl["dr2_logg"].data.filled(np.nan)
-    )
+    cat["logg"] = tbl["logg_gspphot"].data.filled(tbl["dr2_logg"].data.filled(np.nan))
     cat["RUWE"] = tbl["ruwe"].data.filled(99)
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         cat["coords"] = SkyCoord(
             ra=tbl["ra"].value.data * u.deg,
             dec=tbl["dec"].value.data * u.deg,
-            pm_ra_cosdec=tbl["pmra"].value.filled(fill_value=0)
-            * u.mas
-            / u.year,
+            pm_ra_cosdec=tbl["pmra"].value.filled(fill_value=0) * u.mas / u.year,
             pm_dec=tbl["pmdec"].value.filled(fill_value=0) * u.mas / u.year,
             obstime=Time.strptime("2016", "%Y"),
             distance=Distance(parallax=plx * u.mas, allow_negative=True),
@@ -183,8 +176,16 @@ def simulate_flatfield(stddev=0.005, seed=777):
 
 
 def load_vega():
+    wavelength, spectrum = np.loadtxt(f"{PACKAGEDIR}/data/vega.csv", delimiter=",").T
+    wavelength *= u.angstrom
+    spectrum *= u.erg / u.cm**2 / u.s / u.angstrom
+    return wavelength, spectrum
+
+
+def load_benchmark():
+    """Benchmark SED is a 3260K star which is 9th magnitude in j band, which is therefore 13th magnitude in Pandora Visible Band."""
     wavelength, spectrum = np.loadtxt(
-        f"{PACKAGEDIR}/data/vega.csv", delimiter=","
+        f"{PACKAGEDIR}/data/benchmark.csv", delimiter=","
     ).T
     wavelength *= u.angstrom
     spectrum *= u.erg / u.cm**2 / u.s / u.angstrom
@@ -246,10 +247,7 @@ def make_pixel_files():
     NIRDA = NIRDetector()
     df = pd.read_csv(f"{PACKAGEDIR}/data/pixel_vs_wavelength.csv")
     pixel = np.round(np.arange(-400, 80, 0.5), 5) * u.pixel
-    wav = (
-        np.polyval(np.polyfit(df.Pixel, df.Wavelength, 3), pixel.value)
-        * u.micron
-    )
+    wav = np.polyval(np.polyfit(df.Pixel, df.Wavelength, 3), pixel.value) * u.micron
 
     sens = NIRDA.sensitivity(wav)
     corr = np.trapz(sens, wav)
