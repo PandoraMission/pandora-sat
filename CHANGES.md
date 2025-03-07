@@ -7,6 +7,7 @@
 - updated transmission functions
 - added configuration file
 - changed phoneix grid location
+- added benchmark SED to package files
 
 # 0.5.0
 
