@@ -11,7 +11,7 @@ import pandas as pd
 from . import PACKAGEDIR
 from .hardware import Hardware
 from .mixins import DetectorMixins
-from .utils import load_vega, photon_energy
+from .utils import photon_energy
 from .wcs import get_wcs
 
 
@@ -122,7 +122,9 @@ class VisibleDetector(DetectorMixins):
     def throughput(self, wavelength: u.Quantity):
         """Optical throughput at the specified wavelength(s)"""
         df = pd.read_csv(f"{PACKAGEDIR}/data/visible_optical_throughput.csv")
-        throughput = np.interp(wavelength.to(u.nm).value, *np.asarray(df.values).T)
+        throughput = np.interp(
+            wavelength.to(u.nm).value, *np.asarray(df.values).T
+        )
         throughput[wavelength.to(u.nm).value < 380] *= 0
         return throughput
 

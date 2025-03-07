@@ -25,7 +25,9 @@ class DetectorMixins:
                 hdu[1].header[f"TTYPE{idx}"],
                 hdu[1].header[f"TUNIT{idx}"],
             )
-            setattr(self, f"trace_{name}", hdu[1].data[name] * u.Quantity(1, unit))
+            setattr(
+                self, f"trace_{name}", hdu[1].data[name] * u.Quantity(1, unit)
+            )
         self.trace_sensitivity *= hdu[1].header["SENSCORR"] * u.Quantity(
             1, hdu[1].header["CORRUNIT"]
         )
@@ -68,7 +70,9 @@ class DetectorMixins:
         """Use Vega SED to estimate the zeropoint of the detector"""
         wavelength, spectrum = load_vega()
         sens = self.sensitivity(wavelength)
-        zeropoint = np.trapz(spectrum * sens, wavelength) / np.trapz(sens, wavelength)
+        zeropoint = np.trapz(spectrum * sens, wavelength) / np.trapz(
+            sens, wavelength
+        )
         return zeropoint
 
     def flux_to_mag(self, flux):
