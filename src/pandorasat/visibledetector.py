@@ -46,6 +46,8 @@ class VisibleDetector(DetectorMixins):
             self.fieldstop = ~(np.hypot(R, C) > r)
             self._add_trace_params("visda")
 
+        self.zeropoint = self.estimate_zeropoint()
+
     def __repr__(self):
         return "VisibleDetector"
 
@@ -90,12 +92,17 @@ class VisibleDetector(DetectorMixins):
     @property
     def dark_rate(self):
         """Dark Noise"""
-        return 1 * u.electron / u.second
+        return 1 * u.electron / u.second / u.pixel
 
     @property
     def read_noise(self):
         """Read Noise"""
-        return 1.5 * u.electron
+        return 1.5 * u.electron / u.pixel
+
+    @property
+    def background_rate(self):
+        """Detector background rate"""
+        return 2 * u.electron / u.second / u.pixel
 
     @property
     def bias(self):
@@ -115,9 +122,7 @@ class VisibleDetector(DetectorMixins):
     def throughput(self, wavelength: u.Quantity):
         """Optical throughput at the specified wavelength(s)"""
         df = pd.read_csv(f"{PACKAGEDIR}/data/visible_optical_throughput.csv")
-        throughput = np.interp(
-            wavelength.to(u.nm).value, *np.asarray(df.values).T
-        )
+        throughput = np.interp(wavelength.to(u.nm).value, *np.asarray(df.values).T)
         throughput[wavelength.to(u.nm).value < 380] *= 0
         return throughput
 
@@ -224,23 +229,6 @@ class VisibleDetector(DetectorMixins):
                 return result[0]
             return result
 
-    def estimate_zeropoint(self):
-        """Use Vega SED to estimate the zeropoint of the detector"""
-        wavelength, spectrum = load_vega()
-        sens = self.sensitivity(wavelength)
-        zeropoint = np.trapz(spectrum * sens, wavelength) / np.trapz(
-            sens, wavelength
-        )
-        return zeropoint
-
-    def mag_from_flux(self, flux):
-        """Convert flux to magnitude based on the zeropoint of the detector"""
-        return -2.5 * np.log10(flux / self.estimate_zeropoint())
-
-    def flux_from_mag(self, mag):
-        """Convert magnitude to flux based on the zeropoint of the detector"""
-        return self.estimate_zeropoint() * 10 ** (-mag / 2.5)
-
     def get_wcs(self, ra, dec, theta=u.Quantity(0, unit="degree")):
         """Returns an astropy.wcs.WCS object"""
         return get_wcs(
@@ -253,7 +241,7 @@ class VisibleDetector(DetectorMixins):
 
     @property
     def info(self):
-        zp = self.estimate_zeropoint()
+        zp = self.zeropoint
         return pd.DataFrame(
             {
                 "Detector Size": f"({self.naxis1.value.astype(int)}, {self.naxis2.value.astype(int)})",
@@ -269,8 +257,3 @@ class VisibleDetector(DetectorMixins):
             },
             index=[0],
         ).T.rename({0: "VISDA"}, axis="columns")
-
-    @property
-    def background_rate(self):
-        """Detector background rate"""
-        return 2 * u.electron / u.second

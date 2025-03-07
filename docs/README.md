@@ -42,3 +42,12 @@ nirda.plot_sensitivity()
 See our API documentation for full details on the metadata available in this package.
 
 To update any of the values or functions contained within `pandora-sat` due to new testing, commissioning, etc., please open a pull request. Update the relevant values or functions on your branch and then the updates will be reviewed prior to being merged into the main branch of `pandora-sat`.
+
+### Configuration Parameters
+
+Below is a table of all the configuration parameters in `pandorapsf` and their current defaults
+
+|                 (section, key)                          | Description                                                                                                                                              |
+|:------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ('SETTINGS', 'data_dir')                  | Where data will be stored for the package. This includes ~150Mb of phoneix model files which will be downloaded.                                                   |
+| ('SETTINGS', 'log_level')                 | Default level for the logger. Change this to make the tool more or less verbose by default.                                                              |

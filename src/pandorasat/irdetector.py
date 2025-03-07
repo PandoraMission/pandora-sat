@@ -24,6 +24,7 @@ class NIRDetector(DetectorMixins):
     def __post_init__(self):
         """Some detector specific functions to run on initialization"""
         self._add_trace_params("nirda")
+        self.zeropoint = self.estimate_zeropoint()
 
     def __repr__(self):
         return "NIRDetector"
@@ -85,27 +86,27 @@ class NIRDetector(DetectorMixins):
     @property
     def zodiacal_background_rate(self):
         "Zodiacal light background rate"
-        return 4 * u.electron / u.second
+        return 4 * u.electron / u.second / u.pixel
 
     @property
     def stray_light_rate(self):
         "Stray light rate"
-        return 2 * u.electron / u.second
+        return 2 * u.electron / u.second / u.pixel
 
     @property
     def thermal_background_rate(self):
         "NIRDA thermal background rate"
-        return 10 * u.electron / u.second
+        return 10 * u.electron / u.second / u.pixel
 
     @property
     def dark_rate(self):
         """Dark signal rate, detector only, no thermal"""
-        return 1 * u.electron / u.second
+        return 1 * u.electron / u.second / u.pixel
 
     @property
     def read_noise(self):
         """Read noise"""
-        return 18 * u.electron
+        return 18 * u.electron / u.pixel
 
     @property
     def bias(self):
@@ -130,17 +131,14 @@ class NIRDetector(DetectorMixins):
     def throughput(self, wavelength: u.Quantity):
         """Optical throughput at the specified wavelength(s)"""
         df = pd.read_csv(f"{PACKAGEDIR}/data/nir_optical_throughput.csv")
-        throughput = np.interp(
-            wavelength.to(u.nm).value, *np.asarray(df.values).T
-        )
+        throughput = np.interp(wavelength.to(u.nm).value, *np.asarray(df.values).T)
         throughput[wavelength.to(u.nm).value < 380] *= 0
         return throughput
 
     @property
     def gain(self):
         "detector gain"
-        # return 0.5 * u.electron / u.DN
-        return 2 * u.electron / u.DN
+        return (1 / 2.1) * u.electron / u.DN
 
     def apply_gain(self, values: u.Quantity):
         """Applies a single gain value"""
@@ -184,8 +182,7 @@ class NIRDetector(DetectorMixins):
                 wavelength.to(u.micron).value > sw_wavecut_red,
                 sw_qe
                 * np.exp(
-                    (sw_wavecut_red - wavelength.to(u.micron).value)
-                    * sw_exponential
+                    (sw_wavecut_red - wavelength.to(u.micron).value) * sw_exponential
                 ),
                 sw_qe,
             )
@@ -245,7 +242,7 @@ class NIRDetector(DetectorMixins):
 
     @property
     def info(self):
-        zp = self.estimate_zeropoint()
+        zp = self.zeropoint
         return pd.DataFrame(
             {
                 "Detector Size": "(2048, 2048)",
