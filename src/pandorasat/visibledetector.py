@@ -86,10 +86,6 @@ class VisibleDetector(DetectorMixins):
         return self.shape[0] * u.pixel
 
     @property
-    def _dispersion_df(self):
-        return pd.read_csv(f"{PACKAGEDIR}/data/pixel_vs_wavelength_vis.csv")
-
-    @property
     def dark_rate(self):
         """Dark Noise"""
         return 1 * u.electron / u.second / u.pixel

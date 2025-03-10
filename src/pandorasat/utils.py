@@ -254,7 +254,7 @@ def make_pixel_files():
 
     VISDA = VisibleDetector()
     NIRDA = NIRDetector()
-    df = pd.read_csv(f"{PACKAGEDIR}/data/pixel_vs_wavelength.csv")
+    df = pd.read_csv(f"{PACKAGEDIR}/data/nirda_pixel_vs_wavelength.csv")
     pixel = np.round(np.arange(-400, 80, 0.5), 5) * u.pixel
     wav = (
         np.polyval(np.polyfit(df.Pixel, df.Wavelength, 3), pixel.value)

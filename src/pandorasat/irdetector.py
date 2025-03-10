@@ -64,10 +64,6 @@ class NIRDetector(DetectorMixins):
         return self.shape[0] * u.pixel
 
     @property
-    def _dispersion_df(self):
-        return pd.read_csv(f"{PACKAGEDIR}/data/pixel_vs_wavelength.csv")
-
-    @property
     def pixel_read_time(self):
         """Pixel read time"""
         return 1e-5 * u.second / u.pixel
