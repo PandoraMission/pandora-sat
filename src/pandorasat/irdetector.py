@@ -102,6 +102,11 @@ class NIRDetector(DetectorMixins):
     @property
     def read_noise(self):
         """Read noise"""
+        return self.correlated_double_sampling_read_noise / np.sqrt(2)
+
+    @property
+    def correlated_double_sampling_read_noise(self):
+        """This is the read noise obtained when differencing two images."""
         return 18 * u.electron / u.pixel
 
     @property
