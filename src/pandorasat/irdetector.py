@@ -136,7 +136,7 @@ class NIRDetector(DetectorMixins):
     @property
     def gain(self):
         "detector gain"
-        return (1 / 2.1) * u.electron / u.DN
+        return 2.1 * u.electron / u.DN
 
     def apply_gain(self, values: u.Quantity):
         """Applies a single gain value"""
