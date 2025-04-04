@@ -118,7 +118,9 @@ class VisibleDetector(DetectorMixins):
     def throughput(self, wavelength: u.Quantity):
         """Optical throughput at the specified wavelength(s)"""
         df = pd.read_csv(f"{PACKAGEDIR}/data/visible_optical_throughput.csv")
-        throughput = np.interp(wavelength.to(u.nm).value, *np.asarray(df.values).T)
+        throughput = np.interp(
+            wavelength.to(u.nm).value, *np.asarray(df.values).T
+        )
         throughput[wavelength.to(u.nm).value < 380] *= 0
         return throughput
 
