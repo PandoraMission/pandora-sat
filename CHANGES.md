@@ -1,3 +1,7 @@
+# 0.8.5
+
+- updated `get_sky_catalog` to take an epoch argument.
+
 # 0.8.0
 
 - added new sources of noise

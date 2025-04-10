@@ -26,6 +26,7 @@ def get_sky_catalog(
     ra: float,
     dec: float,
     radius: float = 0.155,
+    epoch: float = 2000,
     gbpmagnitude_range: tuple = (-3, 20),
     limit=None,
     gaia_keys: list = [],
@@ -44,6 +45,8 @@ def get_sky_catalog(
         Declination of the center of the query radius in degrees.
     radius : float
         Radius centered on ra and dec that will be queried in degrees.
+    epoch: float
+        The epoch for your input RA and Dec. If not set, assumed to be 2000.
     gbpmagnitude_range : tuple
         Magnitude limits for the query. Targets outside of this range will not be included in
         the final output dictionary.
@@ -86,7 +89,7 @@ def get_sky_catalog(
         POINT({u.Quantity(ra, u.deg).value}, {u.Quantity(dec, u.deg).value}),
         POINT(gaia.ra, gaia.dec)) AS ang_sep,
         EPOCH_PROP_POS(gaia.ra, gaia.dec, gaia.parallax, gaia.pmra, gaia.pmdec,
-        gaia.radial_velocity, gaia.ref_epoch, 2000) AS propagated_position_vector
+        gaia.radial_velocity, gaia.ref_epoch, {epoch}) AS propagated_position_vector
         FROM gaiadr3.gaia_source AS gaia
         JOIN gaiadr3.tmass_psc_xsc_best_neighbour AS xmatch USING (source_id)
         JOIN gaiadr3.dr2_neighbourhood AS xmatch2 ON gaia.source_id = xmatch2.dr3_source_id
