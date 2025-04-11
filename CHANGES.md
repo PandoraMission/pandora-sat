@@ -1,3 +1,7 @@
+# 0.8.6
+
+- updated `VisibleDetector.get_wcs` to accept optional crpix arguments
+
 # 0.8.5
 
 - updated `get_sky_catalog` to take an epoch argument.

@@ -227,13 +227,24 @@ class VisibleDetector(DetectorMixins):
                 return result[0]
             return result
 
-    def get_wcs(self, ra, dec, theta=u.Quantity(0, unit="degree")):
+    def get_wcs(
+        self,
+        ra,
+        dec,
+        theta=u.Quantity(0, unit="degree"),
+        crpix1=1024,
+        crpix2=1024,
+        order=3,
+    ):
         """Returns an astropy.wcs.WCS object"""
         return get_wcs(
             self,
             target_ra=ra,
             target_dec=dec,
             theta=theta,
+            crpix1=crpix1,
+            crpix2=crpix2,
+            order=order,
             distortion_file=f"{PACKAGEDIR}/data/fov_distortion.csv",
         )
 
