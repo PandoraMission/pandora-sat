@@ -53,18 +53,24 @@ def get_wcs(
     for idx in range(2):
         for jdx in range(2):
             hdu.header[f"PC{idx + 1}_{jdx + 1}"] = matrix[idx, jdx]
-    hdu.header["CRPIX1"] = detector.naxis1.value // 2 if crpix1 is None else crpix1
-    hdu.header["CRPIX2"] = detector.naxis2.value // 2 if crpix2 is None else crpix2
+    hdu.header["CRPIX1"] = (
+        detector.naxis1.value // 2 if crpix1 is None else crpix1
+    )
+    hdu.header["CRPIX2"] = (
+        detector.naxis2.value // 2 if crpix2 is None else crpix2
+    )
     hdu.header["NAXIS1"] = detector.naxis1.value
     hdu.header["NAXIS2"] = detector.naxis2.value
-    hdu.header["CDELT1"] = detector.pixel_scale.to(u.deg / u.pixel).value * (-1) ** (
-        int(xreflect)
-    )
-    hdu.header["CDELT2"] = detector.pixel_scale.to(u.deg / u.pixel).value * (-1) ** (
-        int(yreflect)
-    )
+    hdu.header["CDELT1"] = detector.pixel_scale.to(u.deg / u.pixel).value * (
+        -1
+    ) ** (int(xreflect))
+    hdu.header["CDELT2"] = detector.pixel_scale.to(u.deg / u.pixel).value * (
+        -1
+    ) ** (int(yreflect))
     if distortion_file is not None:
-        wcs = _get_distorted_wcs(detector, hdu.header, distortion_file, order=order)
+        wcs = _get_distorted_wcs(
+            detector, hdu.header, distortion_file, order=order
+        )
     else:
         wcs = WCS(hdu.header)
     return wcs
@@ -207,11 +213,16 @@ def _get_distorted_wcs(
 
     # Check that the new correction distorts correctly
     if not np.all(
-        np.hypot(*(np.vstack([Xp.ravel(), Yp.ravel()]) - sip.pix2foc(pix, 1).T)) < 0.1
+        np.hypot(
+            *(np.vstack([Xp.ravel(), Yp.ravel()]) - sip.pix2foc(pix, 1).T)
+        )
+        < 0.1
     ):
         raise ValueError("WCS SIP does not produce expected pixel distortion")
     # Check that the new correction goes back to original coordinates correctly
-    if not np.all(np.hypot(*(pix.T - sip.foc2pix(sip.pix2foc(pix, 1), 1).T)) < 0.1):
+    if not np.all(
+        np.hypot(*(pix.T - sip.foc2pix(sip.pix2foc(pix, 1), 1).T)) < 0.1
+    ):
         raise ValueError("WCS SIP does not invert precisely")
 
     # Build a new WCS object
