@@ -520,6 +520,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#pandorasat.visibledetector.VisibleDetector.average_flux_density_to_mag" class="md-nav__link">
+    <span class="md-ellipsis">
+      average_flux_density_to_mag
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#pandorasat.visibledetector.VisibleDetector.estimate_zeropoint" class="md-nav__link">
     <span class="md-ellipsis">
       estimate_zeropoint
@@ -529,9 +538,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pandorasat.visibledetector.VisibleDetector.flux_from_mag" class="md-nav__link">
+  <a href="#pandorasat.visibledetector.VisibleDetector.flux_to_mag" class="md-nav__link">
     <span class="md-ellipsis">
-      flux_from_mag
+      flux_to_mag
     </span>
   </a>
   
@@ -547,9 +556,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pandorasat.visibledetector.VisibleDetector.mag_from_flux" class="md-nav__link">
+  <a href="#pandorasat.visibledetector.VisibleDetector.mag_to_average_flux_density" class="md-nav__link">
     <span class="md-ellipsis">
-      mag_from_flux
+      mag_to_average_flux_density
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pandorasat.visibledetector.VisibleDetector.mag_to_flux" class="md-nav__link">
+    <span class="md-ellipsis">
+      mag_to_flux
     </span>
   </a>
   
@@ -860,6 +878,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#pandorasat.visibledetector.VisibleDetector.average_flux_density_to_mag" class="md-nav__link">
+    <span class="md-ellipsis">
+      average_flux_density_to_mag
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#pandorasat.visibledetector.VisibleDetector.estimate_zeropoint" class="md-nav__link">
     <span class="md-ellipsis">
       estimate_zeropoint
@@ -869,9 +896,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pandorasat.visibledetector.VisibleDetector.flux_from_mag" class="md-nav__link">
+  <a href="#pandorasat.visibledetector.VisibleDetector.flux_to_mag" class="md-nav__link">
     <span class="md-ellipsis">
-      flux_from_mag
+      flux_to_mag
     </span>
   </a>
   
@@ -887,9 +914,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pandorasat.visibledetector.VisibleDetector.mag_from_flux" class="md-nav__link">
+  <a href="#pandorasat.visibledetector.VisibleDetector.mag_to_average_flux_density" class="md-nav__link">
     <span class="md-ellipsis">
-      mag_from_flux
+      mag_to_average_flux_density
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pandorasat.visibledetector.VisibleDetector.mag_to_flux" class="md-nav__link">
+    <span class="md-ellipsis">
+      mag_to_flux
     </span>
   </a>
   
@@ -1023,15 +1059,15 @@
 </tr>
 <tr>
 <td style="text-align: left;">Read Noise</td>
-<td style="text-align: left;">1.5 <span class="arithmatex">\(\mathrm{e^{-}}\)</span></td>
+<td style="text-align: left;">1.5 <span class="arithmatex">\(\mathrm{\frac{e^{-}}{pix}}\)</span></td>
 </tr>
 <tr>
 <td style="text-align: left;">Dark Noise</td>
-<td style="text-align: left;">1.0 <span class="arithmatex">\(\mathrm{\frac{e^{-}}{s}}\)</span></td>
+<td style="text-align: left;">1.0 <span class="arithmatex">\(\mathrm{\frac{e^{-}}{pix\,s}}\)</span></td>
 </tr>
 <tr>
 <td style="text-align: left;">Bias</td>
-<td style="text-align: left;">100.0 <span class="arithmatex">\(\mathrm{e^{-}}\)</span></td>
+<td style="text-align: left;">100.0 <span class="arithmatex">\(\mathrm{DN}\)</span></td>
 </tr>
 <tr>
 <td style="text-align: left;">Wavelength Midpoint</td>
@@ -1043,7 +1079,7 @@
 </tr>
 <tr>
 <td style="text-align: left;">Zeropoint</td>
-<td style="text-align: left;">3.777e-09<span class="arithmatex">\(\mathrm{\frac{erg}{A\,s\,cm^{2}}}\)</span></td>
+<td style="text-align: left;">3.765e-09<span class="arithmatex">\(\mathrm{\frac{erg}{A\,s\,cm^{2}}}\)</span></td>
 </tr>
 </tbody>
 </table>
@@ -1373,6 +1409,23 @@
 <div class="doc doc-object doc-function">
 
 
+<h2 id="pandorasat.visibledetector.VisibleDetector.average_flux_density_to_mag" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">average_flux_density_to_mag</span><span class="p">(</span><span class="n">average_flux_density</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Convert average flux density to magnitude based on the zeropoint of the detector</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
 <h2 id="pandorasat.visibledetector.VisibleDetector.estimate_zeropoint" class="doc doc-heading">
             <code class="highlight language-python"><span class="n">estimate_zeropoint</span><span class="p">()</span></code>
 
@@ -1390,15 +1443,15 @@
 <div class="doc doc-object doc-function">
 
 
-<h2 id="pandorasat.visibledetector.VisibleDetector.flux_from_mag" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">flux_from_mag</span><span class="p">(</span><span class="n">mag</span><span class="p">)</span></code>
+<h2 id="pandorasat.visibledetector.VisibleDetector.flux_to_mag" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">flux_to_mag</span><span class="p">(</span><span class="n">flux</span><span class="p">)</span></code>
 
 </h2>
 
 
     <div class="doc doc-contents ">
 
-        <p>Convert magnitude to flux based on the zeropoint of the detector</p>
+        <p>Convert flux to magnitude based on the zeropoint of the detector</p>
 
     </div>
 
@@ -1408,7 +1461,7 @@
 
 
 <h2 id="pandorasat.visibledetector.VisibleDetector.get_wcs" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">get_wcs</span><span class="p">(</span><span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span class="n">Quantity</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;degree&#39;</span><span class="p">))</span></code>
+            <code class="highlight language-python"><span class="n">get_wcs</span><span class="p">(</span><span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span class="n">Quantity</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;degree&#39;</span><span class="p">),</span> <span class="n">crpix1</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">crpix2</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span></code>
 
 </h2>
 
@@ -1424,15 +1477,32 @@
 <div class="doc doc-object doc-function">
 
 
-<h2 id="pandorasat.visibledetector.VisibleDetector.mag_from_flux" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">mag_from_flux</span><span class="p">(</span><span class="n">flux</span><span class="p">)</span></code>
+<h2 id="pandorasat.visibledetector.VisibleDetector.mag_to_average_flux_density" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">mag_to_average_flux_density</span><span class="p">(</span><span class="n">mag</span><span class="p">)</span></code>
 
 </h2>
 
 
     <div class="doc doc-contents ">
 
-        <p>Convert flux to magnitude based on the zeropoint of the detector</p>
+        <p>Convert magnitude to average flux density based on the zeropoint of the detector</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="pandorasat.visibledetector.VisibleDetector.mag_to_flux" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">mag_to_flux</span><span class="p">(</span><span class="n">mag</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Convert magnitude to flux based on the zeropoint of the detector</p>
 
     </div>
 

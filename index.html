@@ -335,6 +335,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Example Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuration Parameters
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -501,6 +516,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Example Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuration Parameters
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -549,6 +579,26 @@
 </span></code></pre></div>
 <p>See our API documentation for full details on the metadata available in this package.</p>
 <p>To update any of the values or functions contained within <code>pandora-sat</code> due to new testing, commissioning, etc., please open a pull request. Update the relevant values or functions on your branch and then the updates will be reviewed prior to being merged into the main branch of <code>pandora-sat</code>.</p>
+<h3 id="configuration-parameters">Configuration Parameters</h3>
+<p>Below is a table of all the configuration parameters in <code>pandorapsf</code> and their current defaults</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">(section, key)</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">('SETTINGS', 'data_dir')</td>
+<td style="text-align: left;">Where data will be stored for the package. This includes ~150Mb of phoneix model files which will be downloaded.</td>
+</tr>
+<tr>
+<td style="text-align: left;">('SETTINGS', 'log_level')</td>
+<td style="text-align: left;">Default level for the logger. Change this to make the tool more or less verbose by default.</td>
+</tr>
+</tbody>
+</table>
 
 
 
