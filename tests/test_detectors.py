@@ -108,3 +108,29 @@ def test_plots():
             detector.plot_sensitivity()
             plt.savefig(f"{DOCSDIR}/info/{detector.name}.png", dpi=150)
             plt.close("all")
+
+
+def test_wcs():
+    wcs = VisibleDetector().get_wcs(ra=300 * u.deg, dec=10 * u.deg)
+    origin = 1
+    assert np.allclose(
+        wcs.wcs.crpix,
+        wcs.all_world2pix(
+            wcs.all_pix2world(wcs.wcs.crpix[None, :], origin), origin
+        )[0],
+    )
+    assert np.allclose(
+        wcs.wcs.crval, wcs.all_pix2world(wcs.wcs.crpix[None, :], origin)[0]
+    )
+
+    wcs = NIRDetector().get_wcs(ra=300 * u.deg, dec=10 * u.deg)
+    origin = 1
+    assert np.allclose(
+        wcs.wcs.crpix,
+        wcs.all_world2pix(
+            wcs.all_pix2world(wcs.wcs.crpix[None, :], origin), origin
+        )[0],
+    )
+    assert np.allclose(
+        wcs.wcs.crval, wcs.all_pix2world(wcs.wcs.crpix[None, :], origin)[0]
+    )
