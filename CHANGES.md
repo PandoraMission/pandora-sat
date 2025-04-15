@@ -1,3 +1,7 @@
+# 0.9.0
+
+- Updated throughput to full rolled up expectation
+
 # 0.8.6
 
 - updated `VisibleDetector.get_wcs` to accept optional crpix arguments
