@@ -1,3 +1,7 @@
+# 0.10.0
+
+- Updated the WCS so no reflections in either axis are expected. This is our current expectation, but could change.
+
 # 0.9.2
 
 - Updated throughput to full rolled up expectation

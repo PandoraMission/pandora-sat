@@ -37,7 +37,7 @@ def get_wcs(
         target_ra = u.Quantity(target_ra, "deg")
     if isinstance(target_dec, (np.ndarray, float, int)):
         target_dec = u.Quantity(target_dec, "deg")
-    xreflect = True
+    xreflect = False
     yreflect = False
     hdu = fits.PrimaryHDU()
     hdu.header["CTYPE1"] = "RA---TAN"
