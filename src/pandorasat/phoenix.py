@@ -164,29 +164,37 @@ def get_phoenix_model(teff, logg=4.5, jmag=None, vmag=None):
             "ignore", message="Extinction files not found in "
         )
         # Third-party
-        import pysynphot
+
+    if os.path.isfile(PHOENIXPATH+'/calspec/alpha_lyr_stis_010.fits'):
+        pass
+    else: 
+        os.makedirs(PHOENIXPATH+'/calspec', exist_ok=True)
+        ps.phoenix.download_file('http://ssb.stsci.edu/cdbs/calspec/alpha_lyr_stis_010.fits', PHOENIXPATH+'/calspec/alpha_lyr_stis_010.fits')
+
+
+    import stsynphot as stsyn
+    from synphot import SourceSpectrum
+    from synphot import units as su
     logg1 = logg.value if isinstance(logg, u.Quantity) else logg
-    star = pysynphot.Icat(
+    star = stsyn.grid_to_spec(
         "phoenix",
         teff.value if isinstance(teff, u.Quantity) else teff,
         0,
         logg1 if np.isfinite(logg1) else 5,
     )
     if (jmag is not None) & (vmag is None):
-        star_norm = star.renorm(
-            jmag, "vegamag", pysynphot.ObsBandpass("johnson,j")
-        )
+        star_norm = star.normalize(jmag * su.VEGAMAG, band=stsyn.band('johnson,j'), vegaspec=stsyn.Vega) 
     elif (jmag is None) & (vmag is not None):
-        star_norm = star.renorm(
-            vmag, "vegamag", pysynphot.ObsBandpass("johnson,V")
-        )
+        star_norm = star.normalize(vmag * su.VEGAMAG, band=stsyn.band('johnson,v'), vegaspec=stsyn.Vega) 
     else:
         raise ValueError("Input one of either `jmag` or `vmag`")
-    star_norm.convert("Micron")
-    star_norm.convert("flam")
-    mask = (star_norm.wave >= 0.1) * (star_norm.wave <= 3)
-    wavelength = star_norm.wave[mask] * u.micron
-    wavelength = wavelength.to(u.angstrom)
+    
+    wave = star_norm.waveset.to(u.micron)
+    mask = (wave >= 0.1 * u.micron) * (wave <= 3 * u.micron)
+    
+    sed = star_norm(wave, flux_unit='flam')[mask] / su.FLAM * u.erg / u.s / u.cm**2 / u.angstrom
 
-    sed = star_norm.flux[mask] * u.erg / u.s / u.cm**2 / u.angstrom
+    wavelength = wave[mask]
+    wavelength = wavelength.to(u.angstrom)
+    
     return wavelength, sed
