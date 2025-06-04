@@ -13,6 +13,10 @@ import numpy as np
 import requests
 from astroquery import log as asqlog
 from tqdm import tqdm
+import stsynphot as stsyn
+from synphot import SourceSpectrum
+from synphot import units as su
+
 
 from . import CACHEDIR, PHOENIXGRIDPATH, PHOENIXPATH, logger
 
@@ -93,6 +97,20 @@ def build_phoenix():
         download_phoenix_grid()
         logger.warning("PHEONIX grid downloaded.")
 
+def get_vega():
+    """
+    Downloads the Vega calibration file for STSynPhot and moves it to the proper directory, if one does not already exist.
+    """
+    # Check if the file already exists in the right location
+    if os.path.isfile(PHOENIXPATH+'/calspec/alpha_lyr_stis_010.fits'):
+        logger.debug(f"Found Vega spectrum in {PHOENIXGRIDPATH}/calspec.")
+    else: 
+        logger.warning("No Vega spectrum found, downloading from STScI website.")
+        os.makedirs(PHOENIXPATH+'/calspec', exist_ok=True)
+        download_file('http://ssb.stsci.edu/cdbs/calspec/alpha_lyr_stis_010.fits', PHOENIXPATH+'/calspec/alpha_lyr_stis_010.fits')
+        logger.warning("Vega spectrum downloaded.")
+        
+
 
 def phoenixcontext():
     """
@@ -158,23 +176,36 @@ asqlog.setLevel("ERROR")
 
 @phoenixcontext()
 def get_phoenix_model(teff, logg=4.5, jmag=None, vmag=None):
+    """
+    Function that interpolates the PHOENIX grid to a given temperature and surface gravity.
+    Returns a SED for a star normalized by its Johnson J or V magnitude via STSynPhot.
+
+    Parameters
+    ----------
+    teff : float
+        The effective temperature of the star (Kelvin).
+    logg : float
+        The log surface gravity of the star (log cgs).
+    jmag : float
+        The Johnson J-band magnitude of the star.
+    vmag : float
+        The Johnson V-band magnitude of the star.
+
+    Returns
+    -------
+    wavelength : array
+        An array of wavelengths from 1,000 to 30,000 Angstroms.
+    sed : array
+        The SED of the star, in units of ergs s^-1 cm^-2 Angstrom^-1.
+    """
     build_phoenix()
+    get_vega()
     with warnings.catch_warnings():
         warnings.filterwarnings(
             "ignore", message="Extinction files not found in "
         )
         # Third-party
 
-    if os.path.isfile(PHOENIXPATH+'/calspec/alpha_lyr_stis_010.fits'):
-        pass
-    else: 
-        os.makedirs(PHOENIXPATH+'/calspec', exist_ok=True)
-        ps.phoenix.download_file('http://ssb.stsci.edu/cdbs/calspec/alpha_lyr_stis_010.fits', PHOENIXPATH+'/calspec/alpha_lyr_stis_010.fits')
-
-
-    import stsynphot as stsyn
-    from synphot import SourceSpectrum
-    from synphot import units as su
     logg1 = logg.value if isinstance(logg, u.Quantity) else logg
     star = stsyn.grid_to_spec(
         "phoenix",
