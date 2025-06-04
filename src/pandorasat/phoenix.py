@@ -25,6 +25,7 @@ __all__ = [
     "phoenixcontext",
     "build_phoenix",
     "get_phoenix_model",
+    "get_vega",
 ]
 
 
