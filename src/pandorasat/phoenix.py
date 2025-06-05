@@ -103,12 +103,12 @@ def get_vega():
     Downloads the Vega calibration file for STSynPhot and moves it to the proper directory, if one does not already exist.
     """
     # Check if the file already exists in the right location
-    if os.path.isfile(PHOENIXPATH+'/calspec/alpha_lyr_stis_010.fits'):
+    if os.path.isfile(PHOENIXPATH+'/calspec/alpha_lyr_stis_011.fits'):
         logger.debug(f"Found Vega spectrum in {PHOENIXGRIDPATH}/calspec.")
     else: 
         logger.warning("No Vega spectrum found, downloading from STScI website.")
         os.makedirs(PHOENIXPATH+'/calspec', exist_ok=True)
-        download_file('http://ssb.stsci.edu/cdbs/calspec/alpha_lyr_stis_010.fits', PHOENIXPATH+'/calspec/alpha_lyr_stis_010.fits')
+        download_file('http://ssb.stsci.edu/cdbs/calspec/alpha_lyr_stis_011.fits', PHOENIXPATH+'/calspec/alpha_lyr_stis_011.fits')
         logger.warning("Vega spectrum downloaded.")
         
 
