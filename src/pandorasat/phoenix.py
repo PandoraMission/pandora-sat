@@ -13,10 +13,6 @@ import numpy as np
 import requests
 from astroquery import log as asqlog
 from tqdm import tqdm
-import stsynphot as stsyn
-from synphot import SourceSpectrum
-from synphot import units as su
-
 
 from . import CACHEDIR, PHOENIXGRIDPATH, PHOENIXPATH, logger
 
@@ -98,19 +94,24 @@ def build_phoenix():
         download_phoenix_grid()
         logger.warning("PHEONIX grid downloaded.")
 
+
 def get_vega():
     """
     Downloads the Vega calibration file for STSynPhot and moves it to the proper directory, if one does not already exist.
     """
     # Check if the file already exists in the right location
-    if os.path.isfile(PHOENIXPATH+'/calspec/alpha_lyr_stis_011.fits'):
+    if os.path.isfile(PHOENIXPATH + "/calspec/alpha_lyr_stis_011.fits"):
         logger.debug(f"Found Vega spectrum in {PHOENIXGRIDPATH}/calspec.")
-    else: 
-        logger.warning("No Vega spectrum found, downloading from STScI website.")
-        os.makedirs(PHOENIXPATH+'/calspec', exist_ok=True)
-        download_file('http://ssb.stsci.edu/cdbs/calspec/alpha_lyr_stis_011.fits', PHOENIXPATH+'/calspec/alpha_lyr_stis_011.fits')
+    else:
+        logger.warning(
+            "No Vega spectrum found, downloading from STScI website."
+        )
+        os.makedirs(PHOENIXPATH + "/calspec", exist_ok=True)
+        download_file(
+            "http://ssb.stsci.edu/cdbs/calspec/alpha_lyr_stis_011.fits",
+            PHOENIXPATH + "/calspec/alpha_lyr_stis_011.fits",
+        )
         logger.warning("Vega spectrum downloaded.")
-        
 
 
 def phoenixcontext():
@@ -199,6 +200,10 @@ def get_phoenix_model(teff, logg=4.5, jmag=None, vmag=None):
     sed : array
         The SED of the star, in units of ergs s^-1 cm^-2 Angstrom^-1.
     """
+    # Third-party
+    import stsynphot as stsyn
+    from synphot import units as su
+
     build_phoenix()
     get_vega()
     with warnings.catch_warnings():
@@ -215,18 +220,33 @@ def get_phoenix_model(teff, logg=4.5, jmag=None, vmag=None):
         logg1 if np.isfinite(logg1) else 5,
     )
     if (jmag is not None) & (vmag is None):
-        star_norm = star.normalize(jmag * su.VEGAMAG, band=stsyn.band('johnson,j'), vegaspec=stsyn.Vega) 
+        star_norm = star.normalize(
+            jmag * su.VEGAMAG,
+            band=stsyn.band("johnson,j"),
+            vegaspec=stsyn.Vega,
+        )
     elif (jmag is None) & (vmag is not None):
-        star_norm = star.normalize(vmag * su.VEGAMAG, band=stsyn.band('johnson,v'), vegaspec=stsyn.Vega) 
+        star_norm = star.normalize(
+            vmag * su.VEGAMAG,
+            band=stsyn.band("johnson,v"),
+            vegaspec=stsyn.Vega,
+        )
     else:
         raise ValueError("Input one of either `jmag` or `vmag`")
-    
+
     wave = star_norm.waveset.to(u.micron)
     mask = (wave >= 0.1 * u.micron) * (wave <= 3 * u.micron)
-    
-    sed = star_norm(wave, flux_unit='flam')[mask] / su.FLAM * u.erg / u.s / u.cm**2 / u.angstrom
+
+    sed = (
+        star_norm(wave, flux_unit="flam")[mask]
+        / su.FLAM
+        * u.erg
+        / u.s
+        / u.cm**2
+        / u.angstrom
+    )
 
     wavelength = wave[mask]
     wavelength = wavelength.to(u.angstrom)
-    
+
     return wavelength, sed
