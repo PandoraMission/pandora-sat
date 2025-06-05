@@ -5,7 +5,9 @@ from glob import glob
 # Third-party
 import astropy.units as u
 import numpy as np
+import stsynphot as stsyn
 import pytest
+
 
 # First-party/Local
 from pandorasat import PACKAGEDIR, phoenix
@@ -14,7 +16,7 @@ from pandorasat import PACKAGEDIR, phoenix
 def test_get_vega():
     PHOENIXPATH = phoenix.PHOENIXPATH
     phoenix.get_vega()
-    assert os.path.isfile(PHOENIXPATH+'/calspec/alpha_lyr_stis_010.fits')
+    assert os.path.isfile(PHOENIXPATH+'/calspec/alpha_lyr_stis_011.fits')
 
 # test get_phoenix_model
 def test_spectrum_generation():
