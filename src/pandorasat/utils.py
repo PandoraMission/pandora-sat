@@ -1,4 +1,5 @@
 # Standard library
+import os
 import warnings
 from functools import lru_cache
 
@@ -13,11 +14,12 @@ from astropy.time import Time
 from astroquery.gaia import Gaia
 
 from . import PACKAGEDIR, __version__
-from .phoenix import get_phoenix_model
 
 
 def SED(teff, logg=4.5, jmag=None, vmag=None):
     """Gives a model SED for a given Teff, logg and magnitude."""
+    from .phoenix import get_phoenix_model
+
     return get_phoenix_model(teff, logg=logg, jmag=jmag, vmag=vmag)
 
 
@@ -186,11 +188,18 @@ def simulate_flatfield(stddev=0.005, seed=777):
 
 
 def load_vega():
-    wavelength, spectrum = np.loadtxt(
-        f"{PACKAGEDIR}/data/vega.csv", delimiter=","
-    ).T
-    wavelength *= u.angstrom
-    spectrum *= u.erg / u.cm**2 / u.s / u.angstrom
+    from .phoenix import PHOENIXPATH, get_vega
+
+    os.environ["PYSYN_CDBS"] = PHOENIXPATH
+    get_vega()
+    # Third-party
+    import stsynphot  # noqa : F401
+    from synphot import SourceSpectrum
+
+    vega = SourceSpectrum.from_vega()
+    wavelength, spectrum = vega.waveset, vega(vega.waveset, flux_unit="flam")
+
+    spectrum = spectrum.value * u.erg / u.cm**2 / u.s / u.angstrom
     return wavelength, spectrum
 
 
