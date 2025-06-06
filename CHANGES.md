@@ -1,3 +1,7 @@
+# 0.11.0
+
+- @yoavrotman Updated the pysynphot dependency to synphot and stsynphot
+
 # 0.10.0
 
 - Updated the WCS so no reflections in either axis are expected. This is our current expectation, but could change.

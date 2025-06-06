@@ -21,7 +21,7 @@ __all__ = [
     "phoenixcontext",
     "build_phoenix",
     "get_phoenix_model",
-    "get_vega",
+    "download_vega",
 ]
 
 
@@ -33,6 +33,30 @@ def download_file(file_url, file_path):
             for chunk in r.iter_content(chunk_size=8192):
                 f.write(chunk)
     # astropy_download_file(file_url, cache=True, show_progress=False, pkgname='pandorasat')
+
+
+def download_vega():
+    """
+    Downloads the Vega calibration file for STSynPhot and moves it to the proper directory, if one does not already exist.
+    Ensures the file is set in the config for synphot.
+    """
+    # Check if the file already exists in the right location
+    if os.path.isfile(PHOENIXPATH + "calspec/alpha_lyr_stis_011.fits"):
+        logger.debug(f"Found Vega spectrum in {PHOENIXGRIDPATH}calspec.")
+    else:
+        logger.warning(
+            "No Vega spectrum found, downloading from STScI website."
+        )
+        os.makedirs(PHOENIXPATH + "calspec", exist_ok=True)
+        download_file(
+            "http://ssb.stsci.edu/cdbs/calspec/alpha_lyr_stis_011.fits",
+            PHOENIXPATH + "calspec/alpha_lyr_stis_011.fits",
+        )
+        logger.warning("Vega spectrum downloaded.")
+    # Third-party
+    import synphot
+
+    synphot.conf.vega_file = PHOENIXPATH + "calspec/alpha_lyr_stis_011.fits"
 
 
 def download_phoenix_grid():
@@ -58,7 +82,7 @@ def download_phoenix_grid():
     )
     filenames = filenames[temperatures < 10000]
     _ = [
-        download_file(f"{url}{filename}", f"{PHOENIXGRIDPATH}/{filename}")
+        download_file(f"{url}{filename}", f"{PHOENIXGRIDPATH}{filename}")
         for filename in tqdm(
             filenames,
             desc="Downloading PHOENIX Models",
@@ -78,8 +102,9 @@ def download_phoenix_grid():
     os.removedirs(f"{PHOENIXPATH}grp/redcat/trds/")
     download_file(
         "https://archive.stsci.edu/hlsps/reference-atlases/cdbs/grid/phoenix/catalog.fits",
-        f"{PHOENIXPATH}/grid/phoenix/catalog.fits",
+        f"{PHOENIXPATH}grid/phoenix/catalog.fits",
     )
+    download_vega()
 
 
 def build_phoenix():
@@ -93,25 +118,6 @@ def build_phoenix():
         logger.warning("No PHOENIX grid found, downloading grid.")
         download_phoenix_grid()
         logger.warning("PHEONIX grid downloaded.")
-
-
-def get_vega():
-    """
-    Downloads the Vega calibration file for STSynPhot and moves it to the proper directory, if one does not already exist.
-    """
-    # Check if the file already exists in the right location
-    if os.path.isfile(PHOENIXPATH + "/calspec/alpha_lyr_stis_011.fits"):
-        logger.debug(f"Found Vega spectrum in {PHOENIXGRIDPATH}/calspec.")
-    else:
-        logger.warning(
-            "No Vega spectrum found, downloading from STScI website."
-        )
-        os.makedirs(PHOENIXPATH + "/calspec", exist_ok=True)
-        download_file(
-            "http://ssb.stsci.edu/cdbs/calspec/alpha_lyr_stis_011.fits",
-            PHOENIXPATH + "/calspec/alpha_lyr_stis_011.fits",
-        )
-        logger.warning("Vega spectrum downloaded.")
 
 
 def phoenixcontext():
@@ -205,7 +211,6 @@ def get_phoenix_model(teff, logg=4.5, jmag=None, vmag=None):
     from synphot import units as su
 
     build_phoenix()
-    get_vega()
     with warnings.catch_warnings():
         warnings.filterwarnings(
             "ignore", message="Extinction files not found in "
@@ -250,3 +255,27 @@ def get_phoenix_model(teff, logg=4.5, jmag=None, vmag=None):
     wavelength = wavelength.to(u.angstrom)
 
     return wavelength, sed
+
+
+@phoenixcontext()
+def load_vega():
+    """Loads a spectrum of Vega using synphot
+
+    Returns
+    -------
+    wavelength : array
+        Wavelength array
+    sed : array
+        The SED of the Vega, in units of ergs s^-1 cm^-2 Angstrom^-1.
+    """
+    # Third-party
+    from synphot import SourceSpectrum
+
+    download_vega()
+    # Third-party
+
+    vega = SourceSpectrum.from_vega()
+    wavelength, spectrum = vega.waveset, vega(vega.waveset, flux_unit="flam")
+
+    spectrum = spectrum.value * u.erg / u.cm**2 / u.s / u.angstrom
+    return wavelength, spectrum
