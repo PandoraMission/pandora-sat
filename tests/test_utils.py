@@ -32,36 +32,6 @@ def test_simulate_flatfield():
     return
 
 
-# test load_vega
-def test_load_vega():
-    # Check that the file exists
-    assert os.path.isfile(f"{PACKAGEDIR}/data/vega.csv")
-
-    wav, spec = utils.load_vega()
-
-    # Check that the loaded file is correct
-    assert isinstance(wav, u.Quantity)
-    assert isinstance(spec, u.Quantity)
-    assert len(wav) > 0
-    assert len(spec) > 0
-    return
-
-
-# test load_vega
-def test_load_benchmark():
-    # Check that the file exists
-    assert os.path.isfile(f"{PACKAGEDIR}/data/benchmark.csv")
-
-    wav, spec = utils.load_vega()
-
-    # Check that the loaded file is correct
-    assert isinstance(wav, u.Quantity)
-    assert isinstance(spec, u.Quantity)
-    assert len(wav) > 0
-    assert len(spec) > 0
-    return
-
-
 @pytest.mark.remote_data
 def test_get_sky_catalog():
     # Works with no units

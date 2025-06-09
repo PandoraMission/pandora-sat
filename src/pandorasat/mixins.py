@@ -9,7 +9,7 @@ from astropy.io import fits
 
 # First-party/Local
 from pandorasat import PACKAGEDIR, PANDORASTYLE
-from pandorasat.utils import load_vega
+from pandorasat.phoenix import load_vega
 
 __all__ = ["DetectorMixins"]
 

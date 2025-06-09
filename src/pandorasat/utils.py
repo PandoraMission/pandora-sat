@@ -185,15 +185,6 @@ def simulate_flatfield(stddev=0.005, seed=777):
     return
 
 
-def load_vega():
-    wavelength, spectrum = np.loadtxt(
-        f"{PACKAGEDIR}/data/vega.csv", delimiter=","
-    ).T
-    wavelength *= u.angstrom
-    spectrum *= u.erg / u.cm**2 / u.s / u.angstrom
-    return wavelength, spectrum
-
-
 def load_benchmark():
     """Benchmark SED is a 3260K star which is 9th magnitude in j band, which is therefore 13th magnitude in Pandora Visible Band."""
     wavelength, spectrum = np.loadtxt(

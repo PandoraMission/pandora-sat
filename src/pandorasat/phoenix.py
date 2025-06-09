@@ -21,6 +21,7 @@ __all__ = [
     "phoenixcontext",
     "build_phoenix",
     "get_phoenix_model",
+    "download_vega",
 ]
 
 
@@ -32,6 +33,30 @@ def download_file(file_url, file_path):
             for chunk in r.iter_content(chunk_size=8192):
                 f.write(chunk)
     # astropy_download_file(file_url, cache=True, show_progress=False, pkgname='pandorasat')
+
+
+def download_vega():
+    """
+    Downloads the Vega calibration file for STSynPhot and moves it to the proper directory, if one does not already exist.
+    Ensures the file is set in the config for synphot.
+    """
+    # Check if the file already exists in the right location
+    if os.path.isfile(PHOENIXPATH + "calspec/alpha_lyr_stis_011.fits"):
+        logger.debug(f"Found Vega spectrum in {PHOENIXGRIDPATH}calspec.")
+    else:
+        logger.warning(
+            "No Vega spectrum found, downloading from STScI website."
+        )
+        os.makedirs(PHOENIXPATH + "calspec", exist_ok=True)
+        download_file(
+            "http://ssb.stsci.edu/cdbs/calspec/alpha_lyr_stis_011.fits",
+            PHOENIXPATH + "calspec/alpha_lyr_stis_011.fits",
+        )
+        logger.warning("Vega spectrum downloaded.")
+    # Third-party
+    import synphot
+
+    synphot.conf.vega_file = PHOENIXPATH + "calspec/alpha_lyr_stis_011.fits"
 
 
 def download_phoenix_grid():
@@ -57,7 +82,7 @@ def download_phoenix_grid():
     )
     filenames = filenames[temperatures < 10000]
     _ = [
-        download_file(f"{url}{filename}", f"{PHOENIXGRIDPATH}/{filename}")
+        download_file(f"{url}{filename}", f"{PHOENIXGRIDPATH}{filename}")
         for filename in tqdm(
             filenames,
             desc="Downloading PHOENIX Models",
@@ -77,8 +102,9 @@ def download_phoenix_grid():
     os.removedirs(f"{PHOENIXPATH}grp/redcat/trds/")
     download_file(
         "https://archive.stsci.edu/hlsps/reference-atlases/cdbs/grid/phoenix/catalog.fits",
-        f"{PHOENIXPATH}/grid/phoenix/catalog.fits",
+        f"{PHOENIXPATH}grid/phoenix/catalog.fits",
     )
+    download_vega()
 
 
 def build_phoenix():
@@ -158,35 +184,98 @@ asqlog.setLevel("ERROR")
 
 @phoenixcontext()
 def get_phoenix_model(teff, logg=4.5, jmag=None, vmag=None):
+    """
+    Function that interpolates the PHOENIX grid to a given temperature and surface gravity.
+    Returns a SED for a star normalized by its Johnson J or V magnitude via STSynPhot.
+
+    Parameters
+    ----------
+    teff : float
+        The effective temperature of the star (Kelvin).
+    logg : float
+        The log surface gravity of the star (log cgs).
+    jmag : float
+        The Johnson J-band magnitude of the star.
+    vmag : float
+        The Johnson V-band magnitude of the star.
+
+    Returns
+    -------
+    wavelength : array
+        An array of wavelengths from 1,000 to 30,000 Angstroms.
+    sed : array
+        The SED of the star, in units of ergs s^-1 cm^-2 Angstrom^-1.
+    """
+    # Third-party
+    import stsynphot as stsyn
+    from synphot import units as su
+
     build_phoenix()
     with warnings.catch_warnings():
         warnings.filterwarnings(
             "ignore", message="Extinction files not found in "
         )
         # Third-party
-        import pysynphot
+
     logg1 = logg.value if isinstance(logg, u.Quantity) else logg
-    star = pysynphot.Icat(
+    star = stsyn.grid_to_spec(
         "phoenix",
         teff.value if isinstance(teff, u.Quantity) else teff,
         0,
         logg1 if np.isfinite(logg1) else 5,
     )
     if (jmag is not None) & (vmag is None):
-        star_norm = star.renorm(
-            jmag, "vegamag", pysynphot.ObsBandpass("johnson,j")
+        star_norm = star.normalize(
+            jmag * su.VEGAMAG,
+            band=stsyn.band("johnson,j"),
+            vegaspec=stsyn.Vega,
         )
     elif (jmag is None) & (vmag is not None):
-        star_norm = star.renorm(
-            vmag, "vegamag", pysynphot.ObsBandpass("johnson,V")
+        star_norm = star.normalize(
+            vmag * su.VEGAMAG,
+            band=stsyn.band("johnson,v"),
+            vegaspec=stsyn.Vega,
         )
     else:
         raise ValueError("Input one of either `jmag` or `vmag`")
-    star_norm.convert("Micron")
-    star_norm.convert("flam")
-    mask = (star_norm.wave >= 0.1) * (star_norm.wave <= 3)
-    wavelength = star_norm.wave[mask] * u.micron
+
+    wave = star_norm.waveset.to(u.micron)
+    mask = (wave >= 0.1 * u.micron) * (wave <= 3 * u.micron)
+
+    sed = (
+        star_norm(wave, flux_unit="flam")[mask]
+        / su.FLAM
+        * u.erg
+        / u.s
+        / u.cm**2
+        / u.angstrom
+    )
+
+    wavelength = wave[mask]
     wavelength = wavelength.to(u.angstrom)
 
-    sed = star_norm.flux[mask] * u.erg / u.s / u.cm**2 / u.angstrom
     return wavelength, sed
+
+
+@phoenixcontext()
+def load_vega():
+    """Loads a spectrum of Vega using synphot
+
+    Returns
+    -------
+    wavelength : array
+        Wavelength array
+    sed : array
+        The SED of the Vega, in units of ergs s^-1 cm^-2 Angstrom^-1.
+    """
+    # Third-party
+    from synphot import SourceSpectrum
+
+    download_vega()
+    # Third-party
+
+    vega = SourceSpectrum.from_vega()
+    wavelength, spectrum = vega.waveset, vega(vega.waveset, flux_unit="flam")
+
+    spectrum = spectrum.value * u.erg / u.cm**2 / u.s / u.angstrom
+    return wavelength, spectrum

@@ -3454,23 +3454,6 @@ files = [
 diagrams = ["jinja2", "railroad-diagrams"]
 
 [[package]]
-name = "pysynphot"
-version = "2.0.0"
-description = "Python Synthetic Photometry Utilities"
-optional = false
-python-versions = ">=3.6"
-groups = ["main"]
-files = [
-    {file = "pysynphot-2.0.0.tar.gz", hash = "sha256:45c29f69248ec8a641c38625d11409dd2411ea1d6faffd8c3b44da354c4d22e7"},
-]
-
-[package.dependencies]
-astropy = "*"
-beautifulsoup4 = "*"
-numpy = "*"
-six = "*"
-
-[[package]]
 name = "pytest"
 version = "8.3.4"
 description = "pytest: simple powerful testing with Python"
@@ -4295,6 +4278,124 @@ pure-eval = "*"
 tests = ["cython", "littleutils", "pygments", "pytest", "typeguard"]
 
 [[package]]
+name = "stsynphot"
+version = "1.3.0"
+description = "Synthetic photometry for HST"
+optional = false
+python-versions = ">=3.9"
+groups = ["main"]
+markers = "python_version < \"3.11\""
+files = [
+    {file = "stsynphot-1.3.0-py3-none-any.whl", hash = "sha256:b1a3e6a9e2e2146b0ffb0e239e7776282518d6d3a4313171fa8fc6713e0ab72e"},
+    {file = "stsynphot-1.3.0.tar.gz", hash = "sha256:451e8f9b825f625782458f9b2a86d9bbf405f4120de99e6b80f9b09a86dfa396"},
+]
+
+[package.dependencies]
+astropy = ">=5"
+beautifulsoup4 = "*"
+numpy = ">=1.20"
+scipy = ">=1.6"
+synphot = ">=1.1"
+
+[package.extras]
+all = ["matplotlib"]
+docs = ["sphinx-astropy"]
+test = ["ci-watson", "pytest-astropy"]
+
+[[package]]
+name = "stsynphot"
+version = "1.4.0"
+description = "Synthetic photometry for HST"
+optional = false
+python-versions = ">=3.10"
+groups = ["main"]
+markers = "python_version >= \"3.11\""
+files = [
+    {file = "stsynphot-1.4.0-py3-none-any.whl", hash = "sha256:43151bb4e2376e2e0743f882639f1a1c1cf2e8a9ce479d96b179636a07f50039"},
+    {file = "stsynphot-1.4.0.tar.gz", hash = "sha256:32bd5af99b149983be78483dfd9c202bf95a07124133899f9975ec191e7daa0b"},
+]
+
+[package.dependencies]
+astropy = ">=6"
+beautifulsoup4 = "*"
+numpy = ">=1.23"
+scipy = ">=1.9"
+synphot = ">=1.1"
+
+[package.extras]
+all = ["matplotlib"]
+docs = ["sphinx-astropy"]
+test = ["ci-watson", "pytest-astropy"]
+
+[[package]]
+name = "synphot"
+version = "1.3.post0"
+description = "Synthetic photometry"
+optional = false
+python-versions = ">=3.9"
+groups = ["main"]
+markers = "python_version < \"3.11\""
+files = [
+    {file = "synphot-1.3.post0-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:ddc6e57c30e557d5812ccc4d22b7010066106f4a38f70a24cee41ed36a626289"},
+    {file = "synphot-1.3.post0-cp310-cp310-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:ad807205798cdaf4ec0750008d3a5c9f9f4d778aff30c5d9c937ea362dd6758f"},
+    {file = "synphot-1.3.post0-cp310-cp310-win_amd64.whl", hash = "sha256:2be25f8c8a46bfc0990f8ffb5be6c58d240c708b9810ed16a177d105650f2091"},
+    {file = "synphot-1.3.post0-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:7bb44041ea5b9305da6d0c08a8cb53b2106acf874f1a4bf9aae252fe9cc5ed87"},
+    {file = "synphot-1.3.post0-cp311-cp311-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:4619980b5ab64a350c8d867405262869bfdcaf00ef8a9da9fd7c544d1feb2f94"},
+    {file = "synphot-1.3.post0-cp311-cp311-win_amd64.whl", hash = "sha256:9f0fce71764100e65c8ef9c4dc084bdab0aa5772d07d0a148b6f75912ad19dd9"},
+    {file = "synphot-1.3.post0-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:a45317dd194bd3f4d6157c57705f784fb5aba4529f90a19135a1eb2ef496a41e"},
+    {file = "synphot-1.3.post0-cp312-cp312-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e2f1c709e45123dda30845453c65c27783d7f56de31b1b272f9e1d7d929a9ce4"},
+    {file = "synphot-1.3.post0-cp312-cp312-win_amd64.whl", hash = "sha256:90b1a5f94c56f9539472bf94f61371685761fe94292a0636b533a41f6cf7f777"},
+    {file = "synphot-1.3.post0-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:a8996adc2e5a04a4a9736ea1fe593b8ec30aff0ff4bb3a94a52fffc5bedc0f38"},
+    {file = "synphot-1.3.post0-cp39-cp39-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:56e41ad32c301e013e2061b3e0072b97adfd5e8e301dbfb28a23e1adc254fedf"},
+    {file = "synphot-1.3.post0-cp39-cp39-win_amd64.whl", hash = "sha256:987ad2ada32faf0682eeef2f3f9aa82317aac36c5172d226fc98e707a59054d8"},
+    {file = "synphot-1.3.post0.tar.gz", hash = "sha256:5bf3f8e415ac83d44c0727fb7257db33b09262af850c0cf1100f2a70a319a814"},
+]
+
+[package.dependencies]
+astropy = ">=5"
+numpy = ">=1.20"
+scipy = ">=1.6"
+
+[package.extras]
+all = ["dust-extinction", "specutils (>=0.7)"]
+docs = ["matplotlib", "sphinx-astropy"]
+test = ["pytest-astropy"]
+
+[[package]]
+name = "synphot"
+version = "1.5.0"
+description = "Synthetic photometry"
+optional = false
+python-versions = ">=3.10"
+groups = ["main"]
+markers = "python_version >= \"3.11\""
+files = [
+    {file = "synphot-1.5.0-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:2d97829de48ddf86b06f6cb6d3bc63f692ff5f3b6b6ab83175154ef5b6778315"},
+    {file = "synphot-1.5.0-cp310-cp310-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:3c7514b0c382e3c8e14e249986ef831b4a95622345b8919b21693f5cb1416778"},
+    {file = "synphot-1.5.0-cp310-cp310-win_amd64.whl", hash = "sha256:13362a5427a6e2369a2f8892790fd4846272422f66950628f9c61e7afb7013b9"},
+    {file = "synphot-1.5.0-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:c9c54416eb0a54f37ea9b63bdcde5f3092954c88977672293a8c03ca46a4bfaf"},
+    {file = "synphot-1.5.0-cp311-cp311-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:f4687d55bc301104f581874056ecaffd5cc94b60d4fb51eeec9af662c8e84d00"},
+    {file = "synphot-1.5.0-cp311-cp311-win_amd64.whl", hash = "sha256:bcfafb041104384d59bb8b3c3f98f25d98b9939eb9cacd9cba38929e375b1bd7"},
+    {file = "synphot-1.5.0-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:7fe386e569a0a41fd9660633eeb0e893d65b41deff602ace904422d3b7e67f66"},
+    {file = "synphot-1.5.0-cp312-cp312-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:5d9461162be9858943412249b30ce29eb5915c74b4e7f140fa853bc8bc309922"},
+    {file = "synphot-1.5.0-cp312-cp312-win_amd64.whl", hash = "sha256:399fd4f09ce5300d3a477229de77b0418ebfc466bde9cc322963f5510a8a3b95"},
+    {file = "synphot-1.5.0-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:d6b02347cedc21f8df58258306e34939ecc86f17d5698bbce44f6a7301d15c23"},
+    {file = "synphot-1.5.0-cp313-cp313-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9334ee359e17514e2025206b6c9805de89de03bb5971290cb0daa777ba990c82"},
+    {file = "synphot-1.5.0-cp313-cp313-win_amd64.whl", hash = "sha256:18d6c9bae7d193b13b9e1132964298a240e349d907b6e843bef8d596ada50842"},
+    {file = "synphot-1.5.0.tar.gz", hash = "sha256:4cb384a1b45ea301ad30690a1af2fbb485023160049458ac1c320bb81c782e76"},
+]
+
+[package.dependencies]
+astropy = ">=6"
+numpy = ">=1.23"
+scipy = ">=1.9"
+
+[package.extras]
+all = ["dust-extinction", "specutils (>=0.7)"]
+docs = ["matplotlib", "sphinx-astropy"]
+test = ["pytest-astropy"]
+
+[[package]]
 name = "tabulate"
 version = "0.9.0"
 description = "Pretty-print tabular data"
@@ -4656,4 +4757,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.9,<3.13"
-content-hash = "9985f17e19c6a47ca13fc32fcd1f7f21a148cd41e2e9bcbb630eb17cac883d16"
+content-hash = "c4533bf40f1498a2d2d23345cf7060fd36c9545f75d07b50593b58787966defa"

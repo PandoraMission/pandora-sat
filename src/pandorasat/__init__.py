@@ -164,4 +164,5 @@ def display_config() -> pd.DataFrame:
 from .irdetector import NIRDetector  # noqa: E402, F401
 from .mixins import DetectorMixins  # noqa: E402, F401
 from .pandorasat import PandoraSat  # noqa
+from .phoenix import load_vega  # noqa
 from .visibledetector import VisibleDetector  # noqa: E402, F401
