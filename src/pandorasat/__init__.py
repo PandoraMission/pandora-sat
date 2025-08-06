@@ -2,9 +2,7 @@
 import configparser  # noqa: E402
 import logging  # noqa: E402
 import os  # noqa
-import time  # noqa: E402
 from glob import glob
-from threading import Event, Thread  # noqa: E402
 
 # Third-party
 import numpy as np  # noqa
@@ -49,26 +47,6 @@ class PandoraLogger(logging.Logger):
         self.addHandler(self.handler)
         self.spinner_thread = None
         self.spinner_event = None
-
-    def start_spinner(self, message="Processing..."):
-        if self.spinner_thread is None:
-            self.spinner_event = Event()
-            self.spinner_thread = Thread(target=self._spinner, args=(message,))
-            self.spinner_thread.start()
-
-    def stop_spinner(self):
-        if self.spinner_thread is not None:
-            self.spinner_event.set()
-            self.spinner_thread.join()
-            self.spinner_thread = None
-            self.spinner_event = None
-
-    def _spinner(self, message):
-        with self.handler.console.status(
-            "[bold green]" + message
-        ) as status:  # noqa
-            while not self.spinner_event.is_set():
-                time.sleep(0.1)
 
 
 def get_logger(name="pandorasat"):
@@ -134,7 +112,7 @@ config = load_config()
 for key in ["data_dir", "log_level"]:
     if key not in config["SETTINGS"]:
         logger.error(
-            f"`{key}` missing from the `gaiaoffline` config file. Your configuration is being reset."
+            f"`{key}` missing from the `pandorasat` config file. Your configuration is being reset."
         )
         reset_config()
         config = load_config()
@@ -161,8 +139,25 @@ def display_config() -> pd.DataFrame:
     return pd.concat(dfs)
 
 
+from .hardware import Hardware  # noqa: E402, F401
 from .irdetector import NIRDetector  # noqa: E402, F401
-from .mixins import DetectorMixins  # noqa: E402, F401
-from .pandorasat import PandoraSat  # noqa
-from .phoenix import load_vega  # noqa
+from .orbit import Orbit  # noqa: E402, F401
+from .phoenix import SED  # noqa: E402, F401
+from .utils import *  # noqa: E402, F401, F403
 from .visibledetector import VisibleDetector  # noqa: E402, F401
+
+
+class PandoraSat(object):
+    """Holds information and methods for the full Pandora system."""
+
+    def __init__(self):
+        self.Orbit = Orbit()
+        self.Hardware = Hardware()
+        self.NIRDA = NIRDetector()
+        self.VISDA = VisibleDetector()
+
+    def __repr__(self):
+        return "Pandora Observatory"
+
+    def _repr_html_(self):
+        return "Pandora Observatory"

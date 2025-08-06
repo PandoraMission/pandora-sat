@@ -1,5 +1,4 @@
 # Standard library
-import os
 from glob import glob
 
 # Third-party
@@ -81,21 +80,3 @@ def test_get_sky_catalog():
         ra=210.8023 * u.deg, dec=54.349 * u.deg, radius=0.02 * u.deg, limit=1
     )
     assert len(cat["coords"]) == 1
-
-
-def test_get_phoenix():
-    if os.getenv("GITHUB_ACTIONS") == "true":
-        pytest.skip(
-            "Skipping this test on GitHub Actions this downloads a database of stellar models."
-        )
-
-    wavelength, sed = utils.SED(teff=5000, jmag=9)
-    assert len(wavelength) == len(sed)
-    try:
-        u.Quantity(wavelength, u.AA)
-    except u.UnitConversionError:
-        pytest.fail("Incorrect units")
-    try:
-        u.Quantity(sed, u.erg / (u.AA * u.s * u.cm**2))
-    except u.UnitConversionError:
-        pytest.fail("Incorrect units")

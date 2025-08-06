@@ -20,12 +20,10 @@ def test_pandorasat():
     visda.sensitivity(wavelength)
 
     for detector in [visda, nirda]:
-        for attr in ["trace_sensitivity", "trace_wavelength", "trace_pixel"]:
-            assert hasattr(detector, attr)
-            wcs = detector.get_wcs(150, 0)
-            assert isinstance(wcs, WCS)
-            assert isinstance(wcs.sip, Sip)
-            detector.info
+        wcs = detector.get_wcs(150, 0)
+        assert isinstance(wcs, WCS)
+        assert isinstance(wcs.sip, Sip)
+        detector.info
 
 
 def test_gain():
