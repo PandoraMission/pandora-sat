@@ -18,7 +18,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.5">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
     
     
       
@@ -26,7 +26,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.8608ea7d.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.342714a4.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
@@ -160,11 +160,13 @@
     
     
     
-      <label class="md-header__button md-icon" for="__search">
-        
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
-      </label>
-      <div class="md-search" data-md-component="search" role="dialog">
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
@@ -196,6 +198,7 @@
     </div>
   </div>
 </div>
+      
     
     
       <div class="md-header__source">
@@ -268,6 +271,7 @@
       <a href=".." class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     Home
     
@@ -288,6 +292,7 @@
     <li class="md-nav__item">
       <a href="../intro-to-pandorasat/" class="md-nav__link">
         
+  
   
   <span class="md-ellipsis">
     Introduction
@@ -319,6 +324,7 @@
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
   
+  
   <span class="md-ellipsis">
     NIR Detector
     
@@ -330,6 +336,7 @@
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
+  
   
   <span class="md-ellipsis">
     NIR Detector
@@ -400,18 +407,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pandorasat.irdetector.NIRDetector.correlated_double_sampling_read_noise" class="md-nav__link">
+  <a href="#pandorasat.irdetector.NIRDetector.correlated_double_sampling_readnoise" class="md-nav__link">
     <span class="md-ellipsis">
-      correlated_double_sampling_read_noise
+      correlated_double_sampling_readnoise
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#pandorasat.irdetector.NIRDetector.dark_rate" class="md-nav__link">
+  <a href="#pandorasat.irdetector.NIRDetector.dark" class="md-nav__link">
     <span class="md-ellipsis">
-      dark_rate
+      dark
     </span>
   </a>
   
@@ -454,15 +461,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pandorasat.irdetector.NIRDetector.non_linearity" class="md-nav__link">
-    <span class="md-ellipsis">
-      non_linearity
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#pandorasat.irdetector.NIRDetector.pixel_read_time" class="md-nav__link">
     <span class="md-ellipsis">
       pixel_read_time
@@ -490,9 +488,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pandorasat.irdetector.NIRDetector.read_noise" class="md-nav__link">
+  <a href="#pandorasat.irdetector.NIRDetector.readnoise" class="md-nav__link">
     <span class="md-ellipsis">
-      read_noise
+      readnoise
     </span>
   </a>
   
@@ -538,6 +536,15 @@
   <a href="#pandorasat.irdetector.NIRDetector.thermal_background_rate" class="md-nav__link">
     <span class="md-ellipsis">
       thermal_background_rate
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pandorasat.irdetector.NIRDetector.zeropoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      zeropoint
     </span>
   </a>
   
@@ -603,6 +610,30 @@
       get_wcs
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="get_wcs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pandorasat.irdetector.NIRDetector.get_wcs--parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parameters:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pandorasat.irdetector.NIRDetector.get_wcs--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -706,6 +737,30 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="throughput">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pandorasat.irdetector.NIRDetector.throughput--parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parameters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pandorasat.irdetector.NIRDetector.throughput--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -725,6 +780,7 @@
     <li class="md-nav__item">
       <a href="../visibledetector/" class="md-nav__link">
         
+  
   
   <span class="md-ellipsis">
     Visible Detector
@@ -747,6 +803,7 @@
       <a href="../hardware/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     Hardware
     
@@ -767,6 +824,7 @@
     <li class="md-nav__item">
       <a href="../orbit/" class="md-nav__link">
         
+  
   
   <span class="md-ellipsis">
     Orbit
@@ -851,18 +909,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pandorasat.irdetector.NIRDetector.correlated_double_sampling_read_noise" class="md-nav__link">
+  <a href="#pandorasat.irdetector.NIRDetector.correlated_double_sampling_readnoise" class="md-nav__link">
     <span class="md-ellipsis">
-      correlated_double_sampling_read_noise
+      correlated_double_sampling_readnoise
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#pandorasat.irdetector.NIRDetector.dark_rate" class="md-nav__link">
+  <a href="#pandorasat.irdetector.NIRDetector.dark" class="md-nav__link">
     <span class="md-ellipsis">
-      dark_rate
+      dark
     </span>
   </a>
   
@@ -905,15 +963,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pandorasat.irdetector.NIRDetector.non_linearity" class="md-nav__link">
-    <span class="md-ellipsis">
-      non_linearity
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#pandorasat.irdetector.NIRDetector.pixel_read_time" class="md-nav__link">
     <span class="md-ellipsis">
       pixel_read_time
@@ -941,9 +990,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pandorasat.irdetector.NIRDetector.read_noise" class="md-nav__link">
+  <a href="#pandorasat.irdetector.NIRDetector.readnoise" class="md-nav__link">
     <span class="md-ellipsis">
-      read_noise
+      readnoise
     </span>
   </a>
   
@@ -989,6 +1038,15 @@
   <a href="#pandorasat.irdetector.NIRDetector.thermal_background_rate" class="md-nav__link">
     <span class="md-ellipsis">
       thermal_background_rate
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pandorasat.irdetector.NIRDetector.zeropoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      zeropoint
     </span>
   </a>
   
@@ -1054,6 +1112,30 @@
       get_wcs
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="get_wcs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pandorasat.irdetector.NIRDetector.get_wcs--parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parameters:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pandorasat.irdetector.NIRDetector.get_wcs--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1157,6 +1239,30 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="throughput">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pandorasat.irdetector.NIRDetector.throughput--parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parameters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pandorasat.irdetector.NIRDetector.throughput--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -1210,6 +1316,10 @@
 <td style="text-align: left;">1.0 <span class="arithmatex">\(\mathrm{\frac{e^{-}}{pix\,s}}\)</span></td>
 </tr>
 <tr>
+<td style="text-align: left;">Read Noise</td>
+<td style="text-align: left;">12.727922061357855 <span class="arithmatex">\(\mathrm{\frac{e^{-}}{pix}}\)</span></td>
+</tr>
+<tr>
 <td style="text-align: left;">Wavelength Midpoint</td>
 <td style="text-align: left;">1.30 <span class="arithmatex">\(\mathrm{\mu m}\)</span></td>
 </tr>
@@ -1237,10 +1347,11 @@
 <a id="pandorasat.irdetector.NIRDetector"></a>
     <div class="doc doc-contents first">
             <p class="doc doc-class-bases">
-              Bases: <code><span title="pandorasat.mixins.DetectorMixins">DetectorMixins</span></code></p>
+              Bases: <code><span title="pandorasat.detectormixins.DetectorMixins">DetectorMixins</span></code></p>
 
 
         <p>Holds information on the Pandora IR detector</p>
+
 
 
 
@@ -1274,7 +1385,8 @@
 
     <div class="doc doc-contents ">
 
-        <p>NIRDA detector bias</p>
+        <p>Gain</p>
+
     </div>
 
 </div>
@@ -1296,6 +1408,7 @@
     <div class="doc doc-contents ">
 
         <p>Uncertainty in NIRDA detector bias. Every integration has a different bias.</p>
+
     </div>
 
 </div>
@@ -1317,6 +1430,7 @@
     <div class="doc doc-contents ">
 
         <p>Number of bits per pixel</p>
+
     </div>
 
 </div>
@@ -1325,8 +1439,8 @@
 
 
 
-<h2 id="pandorasat.irdetector.NIRDetector.correlated_double_sampling_read_noise" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">correlated_double_sampling_read_noise</span></code>
+<h2 id="pandorasat.irdetector.NIRDetector.correlated_double_sampling_readnoise" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">correlated_double_sampling_readnoise</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
@@ -1338,6 +1452,7 @@
     <div class="doc doc-contents ">
 
         <p>This is the read noise obtained when differencing two images.</p>
+
     </div>
 
 </div>
@@ -1346,8 +1461,8 @@
 
 
 
-<h2 id="pandorasat.irdetector.NIRDetector.dark_rate" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">dark_rate</span></code>
+<h2 id="pandorasat.irdetector.NIRDetector.dark" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">dark</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
@@ -1358,7 +1473,8 @@
 
     <div class="doc doc-contents ">
 
-        <p>Dark signal rate, detector only, no thermal</p>
+        <p>Dark Noise</p>
+
     </div>
 
 </div>
@@ -1379,7 +1495,8 @@
 
     <div class="doc doc-contents ">
 
-        <p>detector gain</p>
+        <p>Gain</p>
+
     </div>
 
 </div>
@@ -1401,6 +1518,7 @@
     <div class="doc doc-contents ">
 
         <p>Mid point of the sensitivity function</p>
+
     </div>
 
 </div>
@@ -1422,6 +1540,7 @@
     <div class="doc doc-contents ">
 
         <p>WCS's are COLUMN major, so naxis1 is the number of columns</p>
+
     </div>
 
 </div>
@@ -1443,27 +1562,7 @@
     <div class="doc doc-contents ">
 
         <p>WCS's are COLUMN major, so naxis2 is the number of rows</p>
-    </div>
 
-</div>
-
-<div class="doc doc-object doc-attribute">
-
-
-
-<h2 id="pandorasat.irdetector.NIRDetector.non_linearity" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">non_linearity</span></code>
-
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-property"><code>property</code></small>
-  </span>
-
-</h2>
-
-
-    <div class="doc doc-contents ">
-
-        <p>NIRDA non linearity</p>
     </div>
 
 </div>
@@ -1485,6 +1584,7 @@
     <div class="doc doc-contents ">
 
         <p>Pixel read time</p>
+
     </div>
 
 </div>
@@ -1506,6 +1606,7 @@
     <div class="doc doc-contents ">
 
         <p>Pixel scale of the detector</p>
+
     </div>
 
 </div>
@@ -1527,6 +1628,7 @@
     <div class="doc doc-contents ">
 
         <p>Size of a pixel</p>
+
     </div>
 
 </div>
@@ -1535,8 +1637,8 @@
 
 
 
-<h2 id="pandorasat.irdetector.NIRDetector.read_noise" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">read_noise</span></code>
+<h2 id="pandorasat.irdetector.NIRDetector.readnoise" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">readnoise</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
@@ -1547,7 +1649,8 @@
 
     <div class="doc doc-contents ">
 
-        <p>Read noise</p>
+        <p>Read Noise</p>
+
     </div>
 
 </div>
@@ -1569,6 +1672,7 @@
     <div class="doc doc-contents ">
 
         <p>NIRDA saturation limit. Bias contributes to saturation.</p>
+
     </div>
 
 </div>
@@ -1590,6 +1694,7 @@
     <div class="doc doc-contents ">
 
         <p>Shape of the detector in pixels</p>
+
     </div>
 
 </div>
@@ -1611,6 +1716,7 @@
     <div class="doc doc-contents ">
 
         <p>Stray light rate</p>
+
     </div>
 
 </div>
@@ -1632,6 +1738,7 @@
     <div class="doc doc-contents ">
 
         <p>Size of standard subarray</p>
+
     </div>
 
 </div>
@@ -1653,6 +1760,29 @@
     <div class="doc doc-contents ">
 
         <p>NIRDA thermal background rate</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h2 id="pandorasat.irdetector.NIRDetector.zeropoint" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">zeropoint</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Calulate the zeropoint of the detector.</p>
+
     </div>
 
 </div>
@@ -1674,6 +1804,7 @@
     <div class="doc doc-contents ">
 
         <p>Zodiacal light background rate</p>
+
     </div>
 
 </div>
@@ -1693,6 +1824,7 @@
 
         <p>Applies a single gain value</p>
 
+
     </div>
 
 </div>
@@ -1710,6 +1842,7 @@
 
         <p>Convert average flux density to magnitude based on the zeropoint of the detector</p>
 
+
     </div>
 
 </div>
@@ -1725,7 +1858,8 @@
 
     <div class="doc doc-contents ">
 
-        <p>Use Vega SED to estimate the zeropoint of the detector</p>
+        <p>Calulate the zeropoint of the detector.</p>
+
 
     </div>
 
@@ -1744,6 +1878,7 @@
 
         <p>Convert flux to magnitude based on the zeropoint of the detector</p>
 
+
     </div>
 
 </div>
@@ -1761,6 +1896,7 @@
 
         <p>Time to read out one frame of the subarray</p>
 
+
     </div>
 
 </div>
@@ -1769,14 +1905,27 @@
 
 
 <h2 id="pandorasat.irdetector.NIRDetector.get_wcs" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">get_wcs</span><span class="p">(</span><span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span class="n">Quantity</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;degree&#39;</span><span class="p">))</span></code>
+            <code class="highlight language-python"><span class="n">get_wcs</span><span class="p">(</span><span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span class="n">Quantity</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;degree&#39;</span><span class="p">),</span> <span class="n">distortion</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
 
 </h2>
 
 
     <div class="doc doc-contents ">
 
-        <p>Returns an astropy.wcs.WCS object</p>
+        <p>Get the World Coordinate System for a detector as an astropy.wcs.WCS object, given pointing parameters.
+This method only updates the CRVAL and PC parameters, the rest of the WCS is set by reference products
+within this package.</p>
+<h4 id="pandorasat.irdetector.NIRDetector.get_wcs--parameters">Parameters:</h4>
+<p>target_ra: astropy.units.Quantity
+    The target RA in degrees
+target_dec: astropy.units.Quantity
+    The target Dec in degrees
+theta: astropy.units.Quantity
+    The observatory angle in degrees</p>
+<h4 id="pandorasat.irdetector.NIRDetector.get_wcs--returns">Returns:</h4>
+<p>wcs: astropy.wcs.WCS
+    World Coordinate System object</p>
+
 
     </div>
 
@@ -1795,6 +1944,7 @@
 
         <p>Convert magnitude to average flux density based on the zeropoint of the detector</p>
 
+
     </div>
 
 </div>
@@ -1812,6 +1962,7 @@
 
         <p>Convert magnitude to flux based on the zeropoint of the detector</p>
 
+
     </div>
 
 </div>
@@ -1828,6 +1979,7 @@
     <div class="doc doc-contents ">
 
         <p>Plot the sensitivity of the detector as a function of wavelength</p>
+
 
     </div>
 
@@ -1852,6 +2004,7 @@
 <p>qe : npt.NDArray
     Array of the quantum efficiency of the detector</p>
 
+
     </div>
 
 </div>
@@ -1875,6 +2028,7 @@
 <p>sensitivity : npt.NDArray
     Array of the sensitivity of the detector</p>
 
+
     </div>
 
 </div>
@@ -1890,7 +2044,14 @@
 
     <div class="doc doc-contents ">
 
-        <p>Optical throughput at the specified wavelength(s)</p>
+        <p>Calulate the throughput of the detector.</p>
+<h4 id="pandorasat.irdetector.NIRDetector.throughput--parameters">Parameters</h4>
+<p>wavelength : npt.NDArray
+    Wavelength in microns as <code>astropy.unit</code></p>
+<h4 id="pandorasat.irdetector.NIRDetector.throughput--returns">Returns</h4>
+<p>sensitivity : npt.NDArray
+    Array of the throughput of the detector</p>
+
 
     </div>
 
@@ -1949,10 +2110,12 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "..", "features": ["content.code.copy", "content.code.annotate"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": ["content.code.copy", "content.code.annotate"], "search": "../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.f1b6f286.min.js"></script>
+      <script src="../assets/javascripts/bundle.13a4f30d.min.js"></script>
       
         <script src="../javascripts/mathjax.js"></script>
       
