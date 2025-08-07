@@ -121,8 +121,9 @@ class NIRDetector(DetectorMixins):
                 "Subarray Size": f"{self.subarray_size}",
                 "Pixel Scale": f"{self.pixel_scale.value} {self.pixel_scale.unit.to_string('latex')}",
                 "Pixel Size": f"{self.pixel_size.value} {self.pixel_size.unit.to_string('latex')}",
+                "Read Noise": f"{np.round(self.readnoise.value, 1)} {self.readnoise.unit.to_string('latex')}",
                 "Dark Noise": f"{self.dark.value} {self.dark.unit.to_string('latex')}",
-                "Read Noise": f"{self.readnoise.value} {self.readnoise.unit.to_string('latex')}",
+                "Bias": f"{self.bias.value.mean()} {self.bias.unit.to_string('latex')}",
                 "Wavelength Midpoint": f"{self.midpoint.value:.2f} {self.midpoint.unit.to_string('latex')}",
                 "Pixel Read Time": f"{self.pixel_read_time.value:.1e} {self.pixel_read_time.unit.to_string('latex')}",
                 "Zeropoint": f"{self.zeropoint.value:.3e}"
