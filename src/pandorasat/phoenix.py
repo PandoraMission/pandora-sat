@@ -14,7 +14,7 @@ import requests
 from astroquery import log as asqlog
 from tqdm import tqdm
 
-from . import CACHEDIR, PHOENIXGRIDPATH, PHOENIXPATH, logger
+from . import CACHEDIR, PACKAGEDIR, PHOENIXGRIDPATH, PHOENIXPATH, logger
 
 __all__ = [
     "download_phoenix_grid",
@@ -22,6 +22,8 @@ __all__ = [
     "build_phoenix",
     "get_phoenix_model",
     "download_vega",
+    "SED",
+    "load_benchmark",
 ]
 
 
@@ -278,4 +280,19 @@ def load_vega():
     wavelength, spectrum = vega.waveset, vega(vega.waveset, flux_unit="flam")
 
     spectrum = spectrum.value * u.erg / u.cm**2 / u.s / u.angstrom
+    return wavelength, spectrum
+
+
+def SED(teff, logg=4.5, jmag=None, vmag=None):
+    """Gives a model SED for a given Teff, logg and magnitude."""
+    return get_phoenix_model(teff, logg=logg, jmag=jmag, vmag=vmag)
+
+
+def load_benchmark():
+    """Benchmark SED is a 3260K star which is 9th magnitude in j band, which is therefore 13th magnitude in Pandora Visible Band."""
+    wavelength, spectrum = np.loadtxt(
+        f"{PACKAGEDIR}/data/benchmark.csv", delimiter=","
+    ).T
+    wavelength *= u.angstrom
+    spectrum *= u.erg / u.cm**2 / u.s / u.angstrom
     return wavelength, spectrum

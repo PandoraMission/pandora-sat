@@ -1,3 +1,7 @@
+# 0.12.0
+
+- Updated `pandorasat` to use `pandoraref` as the source of reference data products.
+
 # 0.11.0
 
 - @yoavrotman Updated the pysynphot dependency to synphot and stsynphot

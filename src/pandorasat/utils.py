@@ -5,20 +5,10 @@ from functools import lru_cache
 # Third-party
 import astropy.units as u
 import numpy as np
-import pandas as pd
 from astropy.constants import c, h
 from astropy.coordinates import Distance, SkyCoord
-from astropy.io import fits
 from astropy.time import Time
 from astroquery.gaia import Gaia
-
-from . import PACKAGEDIR, __version__
-from .phoenix import get_phoenix_model
-
-
-def SED(teff, logg=4.5, jmag=None, vmag=None):
-    """Gives a model SED for a given Teff, logg and magnitude."""
-    return get_phoenix_model(teff, logg=logg, jmag=jmag, vmag=vmag)
 
 
 @lru_cache
@@ -159,42 +149,6 @@ def photon_energy(wavelength):
     return ((h * c) / wavelength) * 1 / u.photon
 
 
-def simulate_flatfield(stddev=0.005, seed=777):
-    np.random.seed(seed)
-    """ This generates and writes a dummy flatfield file. """
-    for detector in ["VISDA", "NIRDA"]:
-        hdr = fits.Header()
-        hdr["AUTHOR"] = "Christina Hedges"
-        hdr["VERSION"] = __version__
-        hdr["DATE"] = Time.now().strftime("%d-%m-%Y")
-        hdr["STDDEV"] = stddev
-        hdu0 = fits.PrimaryHDU(header=hdr)
-        hdulist = fits.HDUList(
-            [
-                hdu0,
-                fits.CompImageHDU(
-                    data=np.random.normal(1, stddev, (2048, 2048)), name="FLAT"
-                ),
-            ]
-        )
-        hdulist.writeto(
-            f"{PACKAGEDIR}/data/flatfield_{detector}_{Time.now().strftime('%Y-%m-%d')}.fits",
-            overwrite=True,
-            checksum=True,
-        )
-    return
-
-
-def load_benchmark():
-    """Benchmark SED is a 3260K star which is 9th magnitude in j band, which is therefore 13th magnitude in Pandora Visible Band."""
-    wavelength, spectrum = np.loadtxt(
-        f"{PACKAGEDIR}/data/benchmark.csv", delimiter=","
-    ).T
-    wavelength *= u.angstrom
-    spectrum *= u.erg / u.cm**2 / u.s / u.angstrom
-    return wavelength, spectrum
-
-
 def wavelength_to_rgb(wavelength, gamma=0.8):
     """This converts a given wavelength of light to an
     approximate RGB color value. The wavelength must be given
@@ -240,85 +194,3 @@ def wavelength_to_rgb(wavelength, gamma=0.8):
     G *= 255
     B *= 255
     return np.asarray((int(R), int(G), int(B))) / 256
-
-
-def make_pixel_files():
-    from .irdetector import NIRDetector
-    from .visibledetector import VisibleDetector
-
-    VISDA = VisibleDetector()
-    NIRDA = NIRDetector()
-    df = pd.read_csv(f"{PACKAGEDIR}/data/nirda_pixel_vs_wavelength.csv")
-    pixel = np.round(np.arange(-400, 80, 0.5), 5) * u.pixel
-    wav = (
-        np.polyval(np.polyfit(df.Pixel, df.Wavelength, 3), pixel.value)
-        * u.micron
-    )
-
-    sens = NIRDA.sensitivity(wav)
-    corr = np.trapz(sens, wav)
-    hdu = fits.TableHDU.from_columns(
-        [
-            fits.Column(
-                name="pixel",
-                format="D",
-                array=pixel.value,
-                unit=pixel.unit.to_string(),
-            ),
-            fits.Column(
-                name="wavelength",
-                format="D",
-                array=wav.value,
-                unit=wav.unit.to_string(),
-            ),
-            fits.Column(
-                name="sensitivity",
-                format="D",
-                array=(sens / corr),
-                unit=(sens / corr).unit.to_string(),
-            ),
-        ]
-    )
-    hdu.header.append(
-        fits.Card("SENSCORR", corr.value, "correction to apply to sensitivity")
-    )
-    hdu.header.append(
-        fits.Card("CORRUNIT", corr.unit.to_string(), "units of correction")
-    )
-    hdu.writeto(f"{PACKAGEDIR}/data/nirda-wav-solution.fits", overwrite=True)
-
-    wav = np.arange(0.25, 1.3, 0.01) * u.micron
-    pixel = np.zeros(len(wav)) * u.pixel
-    sens = VISDA.sensitivity(wav)
-    corr = np.trapz(sens, wav)
-
-    hdu = fits.TableHDU.from_columns(
-        [
-            fits.Column(
-                name="pixel",
-                format="D",
-                array=pixel.value,
-                unit=pixel.unit.to_string(),
-            ),
-            fits.Column(
-                name="wavelength",
-                format="D",
-                array=wav.value,
-                unit=wav.unit.to_string(),
-            ),
-            fits.Column(
-                name="sensitivity",
-                format="D",
-                array=(sens / corr),
-                unit=(sens / corr).unit.to_string(),
-            ),
-        ]
-    )
-    hdu.header.append(
-        fits.Card("SENSCORR", corr.value, "correction to apply to sensitivity")
-    )
-    hdu.header.append(
-        fits.Card("CORRUNIT", corr.unit.to_string(), "units of correction")
-    )
-    hdu.writeto(f"{PACKAGEDIR}/data/visda-wav-solution.fits", overwrite=True)
-    return
