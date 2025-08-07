@@ -155,9 +155,9 @@ class VisibleDetector(DetectorMixins):
                 "Detector Size": f"({self.naxis1.value.astype(int)}, {self.naxis2.value.astype(int)})",
                 "Pixel Scale": f"{self.pixel_scale.value} {self.pixel_scale.unit.to_string('latex')}",
                 "Pixel Size": f"{self.pixel_size.value} {self.pixel_size.unit.to_string('latex')}",
-                "Read Noise": f"{self.readnoise.value} {self.readnoise.unit.to_string('latex')}",
                 "Dark Noise": f"{self.dark.value} {self.dark.unit.to_string('latex')}",
-                "Bias": f"{self.bias.value} {self.bias.unit.to_string('latex')}",
+                "Bias": f"{self.bias.value.mean()} {self.bias.unit.to_string('latex')}",
+                "Read Noise": f"{self.readnoise.value} {self.readnoise.unit.to_string('latex')}",
                 "Wavelength Midpoint": f"{self.midpoint.value:.2f} {self.midpoint.unit.to_string('latex')}",
                 "Integration Time": f"{self.integration_time.value} {self.integration_time.unit.to_string('latex')}",
                 "Zeropoint": f"{zp.value:.3e}"
