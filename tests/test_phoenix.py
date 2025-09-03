@@ -121,3 +121,16 @@ def test_get_phoenix():
         u.Quantity(sed, u.erg / (u.AA * u.s * u.cm**2))
     except u.UnitConversionError:
         pytest.fail("Incorrect units")
+
+
+def test_get_benchmark():
+    wavelength, sed = phoenix.load_benchmark()
+    assert len(wavelength) == len(sed)
+    try:
+        u.Quantity(wavelength, u.AA)
+    except u.UnitConversionError:
+        pytest.fail("Incorrect units")
+    try:
+        u.Quantity(sed, u.erg / (u.AA * u.s * u.cm**2))
+    except u.UnitConversionError:
+        pytest.fail("Incorrect units")

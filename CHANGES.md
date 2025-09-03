@@ -1,6 +1,8 @@
 # 0.12.0
 
 - Updated `pandorasat` to use `pandoraref` as the source of reference data products.
+- Moved location of some SED tools to the `phoenix` file
+- Added benchmark file back in
 
 # 0.11.0
 
