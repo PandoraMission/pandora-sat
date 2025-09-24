@@ -16,13 +16,7 @@ import stsynphot as stsyn  # noqa: E402
 
 # testing get_vega
 def test_get_vega():
-    if os.getenv("GITHUB_ACTIONS") == "true":
-        pytest.skip(
-            "Skipping this test on GitHub Actions this downloads a database of stellar models."
-        )
-
-    phoenix.download_vega()
-    assert os.path.isfile(PHOENIXPATH + "/calspec/alpha_lyr_stis_011.fits")
+    assert os.path.isfile(PHOENIXPATH + "calspec/alpha_lyr_stis_011.fits")
 
     wav, spec = phoenix.load_vega()
 
