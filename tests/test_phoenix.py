@@ -16,6 +16,7 @@ import stsynphot as stsyn  # noqa: E402
 
 # testing get_vega
 def test_get_vega():
+    phoenix.download_vega()
     assert os.path.isfile(PHOENIXPATH + "calspec/alpha_lyr_stis_011.fits")
 
     wav, spec = phoenix.load_vega()

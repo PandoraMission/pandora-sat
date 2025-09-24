@@ -47,7 +47,9 @@ def download_vega():
     if os.path.isfile(PHOENIXPATH + "calspec/alpha_lyr_stis_011.fits"):
         logger.debug(f"Found Vega spectrum in {PHOENIXGRIDPATH}calspec.")
     else:
-        logger.warning("No Vega spectrum found, downloading from STScI website.")
+        logger.warning(
+            "No Vega spectrum found, downloading from STScI website."
+        )
         os.makedirs(PHOENIXPATH + "calspec", exist_ok=True)
         download_file(
             "http://ssb.stsci.edu/cdbs/calspec/alpha_lyr_stis_011.fits",
@@ -151,7 +153,9 @@ def phoenixcontext():
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             prev_vega = synphot.conf.vega_file
-            synphot.conf.vega_file = PHOENIXPATH + "calspec/alpha_lyr_stis_011.fits"
+            synphot.conf.vega_file = (
+                PHOENIXPATH + "calspec/alpha_lyr_stis_011.fits"
+            )
             try:
                 with modified_environ(PYSYN_CDBS=PHOENIXPATH):
                     return func(*args, **kwargs)
@@ -215,7 +219,9 @@ def get_phoenix_model(teff, logg=4.5, jmag=None, vmag=None):
 
     build_phoenix()
     with warnings.catch_warnings():
-        warnings.filterwarnings("ignore", message="Extinction files not found in ")
+        warnings.filterwarnings(
+            "ignore", message="Extinction files not found in "
+        )
         # Third-party
 
     logg1 = logg.value if isinstance(logg, u.Quantity) else logg
