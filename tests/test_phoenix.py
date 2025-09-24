@@ -2,8 +2,7 @@
 import os
 
 # First-party/Local
-from pandorasat import phoenix
-from pandorasat import logger
+from pandorasat import logger, phoenix
 
 PHOENIXPATH = phoenix.PHOENIXPATH
 os.environ["PYSYN_CDBS"] = PHOENIXPATH
@@ -97,7 +96,9 @@ def test_out_of_grid_logg():
             "Skipping this test on GitHub Actions this downloads a database of stellar models."
         )
     with pytest.raises(stsyn.exceptions.ParameterOutOfBounds):
-        wavelength, sed = phoenix.get_phoenix_model(teff=5000, logg=15.0, jmag=9)
+        wavelength, sed = phoenix.get_phoenix_model(
+            teff=5000, logg=15.0, jmag=9
+        )
 
 
 def test_get_phoenix():
