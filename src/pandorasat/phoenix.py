@@ -11,6 +11,7 @@ from glob import glob
 import astropy.units as u
 import numpy as np
 import requests
+import synphot
 from astroquery import log as asqlog
 from tqdm import tqdm
 
@@ -56,9 +57,6 @@ def download_vega():
         )
         logger.warning("Vega spectrum downloaded.")
     # Third-party
-    import synphot
-
-    synphot.conf.vega_file = PHOENIXPATH + "calspec/alpha_lyr_stis_011.fits"
 
 
 def download_phoenix_grid():
@@ -154,8 +152,15 @@ def phoenixcontext():
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            with modified_environ(PYSYN_CDBS=PHOENIXPATH):
-                return func(*args, **kwargs)
+            prev_vega = synphot.conf.vega_file
+            synphot.conf.vega_file = (
+                PHOENIXPATH + "calspec/alpha_lyr_stis_011.fits"
+            )
+            try:
+                with modified_environ(PYSYN_CDBS=PHOENIXPATH):
+                    return func(*args, **kwargs)
+            finally:
+                synphot.conf.vega_file = prev_vega
 
         return wrapper
 

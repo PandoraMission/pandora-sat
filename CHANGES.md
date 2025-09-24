@@ -1,3 +1,7 @@
+# 0.12.3
+
+- Updated `phoenix.py` context manager so that the vega spectrum is always set right in the config
+
 # 0.12.0
 
 - Updated `pandorasat` to use `pandoraref` as the source of reference data products.
