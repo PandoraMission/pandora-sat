@@ -68,8 +68,13 @@ class NIRDetector(DetectorMixins):
 
     @property
     def subarray_size(self):
-        """Size of standard subarray"""
+        """Size of standard subarray for nominal operations"""
         return (400, 80)
+
+    @property
+    def subarray_corner(self):
+        """Corner of standard subarray for nominal operations"""
+        return (824, 1968)
 
     def frame_time(self, array_size=None):
         """Time to read out one frame of the subarray"""

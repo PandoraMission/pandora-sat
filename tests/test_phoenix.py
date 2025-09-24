@@ -3,6 +3,7 @@ import os
 
 # First-party/Local
 from pandorasat import phoenix
+from pandorasat import logger
 
 PHOENIXPATH = phoenix.PHOENIXPATH
 os.environ["PYSYN_CDBS"] = PHOENIXPATH
@@ -16,6 +17,7 @@ import stsynphot as stsyn  # noqa: E402
 
 # testing get_vega
 def test_get_vega():
+    logger.setLevel("DEBUG")
     phoenix.download_vega()
     assert os.path.isfile(PHOENIXPATH + "calspec/alpha_lyr_stis_011.fits")
 

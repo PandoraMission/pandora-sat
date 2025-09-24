@@ -45,21 +45,24 @@ def download_vega():
     """
     # Check if the file already exists in the right location
     if os.path.isfile(PHOENIXPATH + "calspec/alpha_lyr_stis_011.fits"):
-        logger.debug(f"Found Vega spectrum in {PHOENIXGRIDPATH}calspec.")
-    else:
-        logger.warning(
-            "No Vega spectrum found, downloading from STScI website."
+        logger.debug(
+            f"Found Vega spectrum in {PHOENIXPATH + 'calspec/alpha_lyr_stis_011.fits'}"
         )
+    else:
+        logger.warning("No Vega spectrum found, downloading from STScI website.")
         os.makedirs(PHOENIXPATH + "calspec", exist_ok=True)
         download_file(
             "http://ssb.stsci.edu/cdbs/calspec/alpha_lyr_stis_011.fits",
             PHOENIXPATH + "calspec/alpha_lyr_stis_011.fits",
         )
-        logger.warning("Vega spectrum downloaded.")
+        logger.warning(
+            f"Vega spectrum downloaded. Downloaded to {PHOENIXPATH} calspec/alpha_lyr_stis_011.fits."
+        )
     # Third-party
 
 
 def download_phoenix_grid():
+    logger.debug("Downloading PHOENIX grid.")
     os.makedirs(CACHEDIR, exist_ok=True)
     if os.path.isdir(PHOENIXPATH):
         shutil.rmtree(PHOENIXPATH)
@@ -152,15 +155,18 @@ def phoenixcontext():
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
+            logger.debug(f"Started pandorasat PHOENIX context.")
             prev_vega = synphot.conf.vega_file
-            synphot.conf.vega_file = (
-                PHOENIXPATH + "calspec/alpha_lyr_stis_011.fits"
-            )
+            logger.debug(f"Vega file config was {synphot.conf.vega_file}.")
+
+            synphot.conf.vega_file = PHOENIXPATH + "calspec/alpha_lyr_stis_011.fits"
+            logger.debug(f"Vega file config set to {synphot.conf.vega_file}.")
             try:
                 with modified_environ(PYSYN_CDBS=PHOENIXPATH):
                     return func(*args, **kwargs)
             finally:
                 synphot.conf.vega_file = prev_vega
+            logger.debug(f"Vega file config set back to {synphot.conf.vega_file}.")
 
         return wrapper
 
@@ -219,9 +225,7 @@ def get_phoenix_model(teff, logg=4.5, jmag=None, vmag=None):
 
     build_phoenix()
     with warnings.catch_warnings():
-        warnings.filterwarnings(
-            "ignore", message="Extinction files not found in "
-        )
+        warnings.filterwarnings("ignore", message="Extinction files not found in ")
         # Third-party
 
     logg1 = logg.value if isinstance(logg, u.Quantity) else logg
@@ -231,17 +235,19 @@ def get_phoenix_model(teff, logg=4.5, jmag=None, vmag=None):
         0,
         logg1 if np.isfinite(logg1) else 5,
     )
+    vega = stsyn.Vega
+    logger.debug(f"Vega spectrum set to {vega}")
     if (jmag is not None) & (vmag is None):
         star_norm = star.normalize(
             jmag * su.VEGAMAG,
             band=stsyn.band("johnson,j"),
-            vegaspec=stsyn.Vega,
+            vegaspec=vega,
         )
     elif (jmag is None) & (vmag is not None):
         star_norm = star.normalize(
             vmag * su.VEGAMAG,
             band=stsyn.band("johnson,v"),
-            vegaspec=stsyn.Vega,
+            vegaspec=vega,
         )
     else:
         raise ValueError("Input one of either `jmag` or `vmag`")

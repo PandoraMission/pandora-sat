@@ -1,4 +1,4 @@
-# 0.12.3
+# 0.12.5
 
 - Updated `phoenix.py` context manager so that the vega spectrum is always set right in the config
 
